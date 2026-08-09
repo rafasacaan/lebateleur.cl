@@ -152,66 +152,68 @@ body{
 .bar-home:focus-visible,
 .bar-close:focus-visible{ outline:1px solid #000; outline-offset:4px; }
 
-.project-body{ max-width:34em; }
+/* el cuerpo del proyecto lee al mismo tamaño que la portada (22px/28px):
+   ya no es un panel anidado bajo la bio, es su propia página */
+.project-body{ max-width:38em; }
 
 .panel-spec{
-  font-size:13px;
+  font-size:17px;
   margin-top:0;
-  line-height:20px;
+  line-height:25px;
   letter-spacing:.02em;
   color:#767676;
-  margin-bottom:32px;
+  margin-bottom:40px;
 }
 
 /* rótulo de sección: el que corta el bloque en partes escaneables */
 .panel-label{
-  font-size:11px;
-  line-height:16px;
+  font-size:13px;
+  line-height:18px;
   letter-spacing:.14em;
   text-transform:uppercase;
   color:#767676;
-  margin-bottom:14px;
+  margin-bottom:16px;
 }
-.panel-label:not(:first-of-type){ margin-top:44px; }
+.panel-label:not(:first-of-type){ margin-top:52px; }
 
 .panel-text{
-  font-size:17px;
-  line-height:25px;
-  letter-spacing:-.1px;
+  font-size:22px;
+  line-height:28px;
+  letter-spacing:-.2px;
   color:#000;
 }
-.panel-text + .panel-text{ margin-top:16px; }
+.panel-text + .panel-text{ margin-top:20px; }
 
 /* los posts numerados: la serie tiene orden, y el número lo hace evidente
    sin tener que repetir "hey-frank #N" en cada título */
 .panel-list{
   list-style:none;
   counter-reset:post;
-  font-size:17px;
-  line-height:25px;
-  letter-spacing:-.1px;
+  font-size:22px;
+  line-height:28px;
+  letter-spacing:-.2px;
 }
 .panel-list li{
   counter-increment:post;
   display:flex;
-  gap:14px;
-  padding:7px 0;
+  gap:16px;
+  padding:10px 0;
   border-bottom:1px solid #f2f2f2;
 }
 .panel-list li:first-child{ border-top:1px solid #f2f2f2; }
 .panel-list li::before{
   content:counter(post);
   color:#999;
-  font-size:13px;
+  font-size:15px;
   flex:none;
   width:1ch;
-  padding-top:3px;
+  padding-top:5px;
 }
 .panel-list a{ color:#666; text-decoration:none; transition:color .2s; }
 .panel-list a:hover{ color:#000; }
 /* lo que todavía no está publicado no finge ser clickeable */
 .panel-list .unpublished{ color:#767676; }
-.panel-list .unpublished em{ font-style:normal; font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
+.panel-list .unpublished em{ font-style:normal; font-size:15px; letter-spacing:.08em; text-transform:uppercase; }
 
 /* placeholder del video: un 16:9 vacío, apenas más claro que el papel */
 .video{
@@ -224,7 +226,7 @@ body{
   justify-content:center;
   gap:10px;
   color:#767676;
-  font-size:13px;
+  font-size:17px;
   letter-spacing:.02em;
 }
 
@@ -248,7 +250,10 @@ body{
   body{ margin-top:56px; padding:0 24px 56px; }
   .all{ flex-direction:column; gap:40px; }
   .left, .right{ max-width:100%; flex:none; padding-right:0; margin-top:0; }
-  .para{ font-size:20px; line-height:26px; }
+  /* el cuerpo del proyecto acompaña a la portada también acá */
+  .para,
+  .panel-text,
+  .panel-list{ font-size:20px; line-height:26px; }
 
   /* la barra no cabe en una línea: "Home — Projects" y el × arriba,
      el nombre del proyecto en su propia línea debajo */
