@@ -63,6 +63,18 @@ body{
 
 .para em{ font-style:italic; }
 
+/* nota al pie de la columna de contacto: en cursiva y un escalón más chica,
+   para que se lea como aparte y no como parte del contacto */
+.note{
+  margin-top:28px;
+  font-size:17px;
+  line-height:25px;
+  letter-spacing:-.1px;
+  color:#767676;
+  max-width:30ch;
+}
+.note em{ font-style:italic; }
+
 /* "Projects" es el mismo texto negro del cuerpo, solo separado del párrafo */
 .para--heading{ margin-top:84px; }
 
