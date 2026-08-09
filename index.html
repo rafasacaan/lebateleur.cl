@@ -35,7 +35,7 @@
 </head>
 <body>
 
-<div class="all">
+<div class="all" id="view-index">
 
   <div class="left">
     <p class="para">
@@ -55,47 +55,11 @@
 
     <p class="para para--heading">Projects</p>
 
-    <!-- El índice queda entero arriba: el detalle abre DEBAJO de la lista, no
-         entre los nombres, así sigue sirviendo de navegación cuando sumemos
-         más. yoescritor es un <button> y no un <a> porque no navega. -->
+    <!-- Cada proyecto es un <a> a su propia URL con hash. El router de abajo
+         cambia de vista al oírla, así el link es compartible y el botón atrás
+         del navegador funciona. -->
     <div class="projects">
-      <button class="project-name" type="button"
-              aria-expanded="false" aria-controls="panel-yoescritor">yoescritor</button>
-    </div>
-
-    <div class="panel" id="panel-yoescritor" hidden>
-
-      <p class="panel-spec">2026 &nbsp;·&nbsp; writing companion &nbsp;·&nbsp; in design</p>
-
-      <p class="panel-label">Overview</p>
-      <p class="panel-text">
-        An AI companion for writing &mdash; one that helps you find the writer
-        already living inside you. The bet is simple: help you write better, so
-        that you keep writing at all.
-      </p>
-      <p class="panel-text">
-        It started from a personal problem. I write in notebooks and never look
-        back, because reading myself is uncomfortable &mdash; the inner critic is
-        always the cruelest one. yoescritor is meant to sit next to that voice
-        rather than replace it: closer to a note in the margin than to a chat
-        window.
-      </p>
-
-      <p class="panel-label">Demo</p>
-      <div class="video" role="img" aria-label="Demo video placeholder">
-        <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
-          <circle cx="12" cy="12" r="11" fill="none" stroke="#bbb" stroke-width="1"/>
-          <path d="M10 8.5l6 3.5-6 3.5z" fill="#bbb"/>
-        </svg>
-        <span>Coming soon</span>
-      </div>
-
-      <p class="panel-label">Writing</p>
-      <ol class="panel-list">
-        <li><span class="unpublished">Escribir casi solo <em>&mdash; draft</em></span></li>
-      </ol>
-
-      <button class="panel-close" type="button" data-closes="panel-yoescritor">Close</button>
+      <a class="project-name" href="#project-yoescritor">yoescritor</a>
     </div>
   </div>
 
@@ -118,52 +82,94 @@
 
 </div>
 
-<script>
-  // Un solo proyecto abierto a la vez. No toca la URL: es puro despliegue.
-  (function () {
-    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+<!-- Vista de proyecto: reemplaza la portada en vez de desplegarse debajo.
+     Vive en su propia URL (#project-yoescritor), así se puede compartir. -->
+<div class="project-view" id="project-yoescritor" data-title="yoescritor"
+     tabindex="-1" hidden>
 
-    function closeAll() {
-      document.querySelectorAll('.project-name[aria-expanded="true"]').forEach(function (open) {
-        open.setAttribute('aria-expanded', 'false');
-        document.getElementById(open.getAttribute('aria-controls')).hidden = true;
-      });
+  <header class="bar">
+    <a class="bar-home" href="#">Home &mdash; Projects</a>
+    <span class="bar-name">yoescritor</span>
+    <a class="bar-close" href="#" aria-label="Close project">&times;</a>
+  </header>
+
+  <div class="project-body">
+    <p class="panel-spec">2026 &nbsp;·&nbsp; writing companion &nbsp;·&nbsp; in design</p>
+
+    <p class="panel-label">Overview</p>
+    <p class="panel-text">
+      An AI companion for writing &mdash; one that helps you find the writer
+      already living inside you. The bet is simple: help you write better, so
+      that you keep writing at all.
+    </p>
+    <p class="panel-text">
+      It started from a personal problem. I write in notebooks and never look
+      back, because reading myself is uncomfortable &mdash; the inner critic is
+      always the cruelest one. yoescritor is meant to sit next to that voice
+      rather than replace it: closer to a note in the margin than to a chat
+      window.
+    </p>
+
+    <p class="panel-label">Demo</p>
+    <div class="video" role="img" aria-label="Demo video placeholder">
+      <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
+        <circle cx="12" cy="12" r="11" fill="none" stroke="#bbb" stroke-width="1"/>
+        <path d="M10 8.5l6 3.5-6 3.5z" fill="#bbb"/>
+      </svg>
+      <span>Coming soon</span>
+    </div>
+
+    <p class="panel-label">Writing</p>
+    <ol class="panel-list">
+      <li><span class="unpublished">Escribir casi solo <em>&mdash; draft</em></span></li>
+    </ol>
+  </div>
+</div>
+
+<script>
+  // Router de hash: #project-<slug> muestra esa vista y esconde la portada.
+  // Es un <a> de verdad, así que el link se comparte y el botón atrás vuelve.
+  (function () {
+    var HOME_TITLE = document.title;
+    var index = document.getElementById('view-index');
+    var views = document.querySelectorAll('.project-view');
+
+    function route() {
+      var id = location.hash.slice(1);
+      var target = id ? document.getElementById(id) : null;
+      if (target && !target.classList.contains('project-view')) target = null;
+
+      views.forEach(function (v) { v.hidden = v !== target; });
+      index.hidden = !!target;
+
+      document.title = target
+        ? target.dataset.title + ' — Rafa Sacaan'
+        : HOME_TITLE;
+
+      window.scrollTo(0, 0);
+      if (target) target.focus({ preventScroll: true });
     }
 
-    document.querySelectorAll('.project-name[aria-controls]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var panel = document.getElementById(btn.getAttribute('aria-controls'));
-        var wasOpen = btn.getAttribute('aria-expanded') === 'true';
-
-        closeAll();
-        if (wasOpen) return;
-
-        btn.setAttribute('aria-expanded', 'true');
-        panel.hidden = false;
-
-        // deja el índice a la vista junto al detalle, en vez de saltar al panel
-        btn.scrollIntoView({ block: 'center', behavior: calm ? 'auto' : 'smooth' });
+    // volver a la portada sin dejar un "#" colgando en la barra de direcciones
+    document.querySelectorAll('.bar-home, .bar-close').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        history.pushState(null, '', location.pathname);
+        route();
       });
     });
 
-    document.querySelectorAll('.panel-close').forEach(function (close) {
-      close.addEventListener('click', function () {
-        var opener = document.querySelector(
-          '.project-name[aria-controls="' + close.dataset.closes + '"]'
-        );
-        closeAll();
-        opener.focus(); // el foco vuelve al nombre, no se pierde al final del documento
-      });
-    });
-
-    // Escape cierra, como cualquier cosa que se despliega
+    // Escape cierra el proyecto, como el × de la barra
     document.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape') return;
-      var open = document.querySelector('.project-name[aria-expanded="true"]');
-      if (!open) return;
-      closeAll();
-      open.focus();
+      if (e.key === 'Escape' && location.hash) {
+        history.pushState(null, '', location.pathname);
+        route();
+      }
     });
+
+    window.addEventListener('hashchange', route);
+    window.addEventListener('popstate', route);
+    route(); // respeta el hash con el que se entró (deep link)
   })();
 </script>
 

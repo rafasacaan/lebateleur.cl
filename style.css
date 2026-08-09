@@ -28,6 +28,8 @@ body{
   max-width:1106px;
   gap:52px;
 }
+/* display:flex le gana al atributo hidden, así que hay que decirlo aparte */
+.all[hidden]{ display:none; }
 
 /* left: bio + projects (wide) */
 .left{
@@ -80,64 +82,81 @@ body{
 
 /* ---- proyectos desplegables ---- */
 
-/* el índice: los cuatro nombres quedan juntos y siempre visibles, para que
-   sigan funcionando como navegación aunque haya un detalle abierto */
+/* el índice de proyectos */
 .projects{
   margin-top:28px;
   display:flex;
   flex-direction:column;
   align-items:flex-start;
-  /* deja el canal donde vive la marca del proyecto abierto */
-  padding-left:22px;
-  margin-left:-22px;
 }
 
-/* el nombre se ve igual que un link del cuerpo, pero es un <button>:
-   no navega, despliega. Reseteamos todo lo que el navegador le pone. */
+/* en versalitas y negro: los proyectos son lo único de la portada que lleva
+   a otra parte, así que pesan más que el resto del texto */
 .project-name{
   display:inline-block;
-  font:inherit;
+  font-size:22px;
+  line-height:30px;
+  letter-spacing:0;
+  text-transform:uppercase;
+  color:#000;
+  text-decoration:none;
+  transition:color .2s;
+}
+.project-name:hover{ color:#767676; }
+.project-name:focus-visible{ outline:1px solid #000; outline-offset:4px; }
+
+/* ---- vista de proyecto ----
+   reemplaza la portada; el cuerpo baja a 17px/25px para que la barra y el
+   nombre del proyecto manden la jerarquía */
+/* vive como hermano de .all dentro del body flex, así que carga el mismo
+   ancho máximo para alinearse con la portada */
+.project-view{
+  width:100%;
+  max-width:1106px;
+  outline:none;
+}
+.project-view[hidden]{ display:none; }
+
+.bar{
+  display:flex;
+  align-items:baseline;
+  gap:24px;
+  padding-bottom:44px;
+}
+.bar-home{
   font-size:22px;
   line-height:28px;
   letter-spacing:-.2px;
-  background:none;
-  border:0;
-  padding:0;
-  margin:0;
-  text-align:left;
-  cursor:pointer;
+  text-transform:uppercase;
   color:#767676;
   text-decoration:none;
   transition:color .2s;
 }
-.project-name{ position:relative; }
-.project-name:hover{ color:#000; }
-/* el abierto se marca en negro y con una barra en el canal de la izquierda:
-   es el indicador de "estás acá" mientras el detalle está desplegado */
-.project-name[aria-expanded="true"]{ color:#000; }
-.project-name[aria-expanded="true"]::before{
-  content:'';
-  position:absolute;
-  left:-22px;
-  top:9px;
-  width:10px;
-  height:1px;
-  background:#000;
+.bar-home:hover{ color:#000; }
+.bar-name{
+  font-size:22px;
+  line-height:28px;
+  letter-spacing:-.2px;
+  text-transform:uppercase;
+  color:#000;
+  margin-left:auto;
 }
-.project-name:focus-visible{ outline:1px solid #000; outline-offset:4px; }
+.bar-close{
+  font-size:26px;
+  line-height:28px;
+  color:#767676;
+  text-decoration:none;
+  transition:color .2s;
+}
+.bar-close:hover{ color:#000; }
+.bar-home:focus-visible,
+.bar-close:focus-visible{ outline:1px solid #000; outline-offset:4px; }
 
-/* ---- el detalle ----
-   toda la capa baja a 17px/25px: al ser claramente más chica que los 22px
-   del cuerpo, se lee como subnivel y no como más bio */
-.panel{
-  margin-top:36px;
-  padding-top:32px;
-  border-top:1px solid #ebebeb;
-  max-width:34em;
-}
+.project-body{ max-width:34em; }
 
 .panel-spec{
   font-size:13px;
+  margin-top:0;
   line-height:20px;
   letter-spacing:.02em;
   color:#767676;
@@ -230,4 +249,11 @@ body{
   .all{ flex-direction:column; gap:40px; }
   .left, .right{ max-width:100%; flex:none; padding-right:0; margin-top:0; }
   .para{ font-size:20px; line-height:26px; }
+
+  /* la barra no cabe en una línea: "Home — Projects" y el × arriba,
+     el nombre del proyecto en su propia línea debajo */
+  .bar{ flex-wrap:wrap; gap:12px; padding-bottom:32px; }
+  .bar-home{ flex:1 1 auto; font-size:18px; line-height:24px; }
+  .bar-close{ order:2; }
+  .bar-name{ order:3; flex-basis:100%; margin-left:0; font-size:18px; line-height:24px; }
 }
