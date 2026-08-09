@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rafa Sacaan | Consulting, code, and AI agents</title>
+<meta name="description" content="I'm Rafa Sacaan, an engineer based in Santiago, Chile, working at the intersection of consulting with advanced analytics, code, and AI agents.">
+<meta property="og:title" content="Rafa Sacaan | Consulting, code, and AI agents">
+<meta property="og:description" content="I'm Rafa Sacaan, an engineer based in Santiago, Chile, working at the intersection of consulting with advanced analytics, code, and AI agents.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rafasacaan.com/">
+<meta property="og:image" content="https://rafasacaan.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rafa Sacaan — consulting, code, and AI agents. Santiago, Chile.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rafa Sacaan | Consulting, code, and AI agents">
+<meta name="twitter:description" content="I'm Rafa Sacaan, an engineer based in Santiago, Chile, working at the intersection of consulting with advanced analytics, code, and AI agents.">
+<meta name="twitter:image" content="https://rafasacaan.com/og.png">
+<link rel="canonical" href="https://rafasacaan.com/">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<!-- Neue Haas Unica is a paid typeface (Monotype). If you ever license it via
+     Adobe Fonts, drop your web project's <link> here and it takes over on its
+     own: it already sits first in the stack in style.css. Until then Inter
+     stands in — same neo-grotesque family, free. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;1,14..32,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="all">
+
+  <div class="left">
+    <p class="para">
+      I'm Rafa Sacaan, an engineer born and based in Santiago, Chile. I work at
+      the intersection of consulting with advanced analytics, code, and the
+      question of what can be automated to free people from monotonous work and
+      give them their time back, without losing the human part along the way.
+      <br><br>
+      I come from Python and I find ways to build AI agents that do real work
+      &mdash; not demos. My practice spans software architecture,
+      multi-agent systems, model evaluation, and the craft of writing about all
+      of it.
+      <br><br>
+      Building something starts with understanding a problem. I like shaping
+      that solution slowly and carefully, thinking about how current processes
+      can be redesigned.
+    </p>
+
+    <p class="para para--heading">Projects</p>
+
+    <!-- El índice queda entero arriba: el detalle abre DEBAJO de la lista, no
+         entre los nombres, así sigue sirviendo de navegación cuando sumemos
+         más. yoescritor es un <button> y no un <a> porque no navega. -->
+    <div class="projects">
+      <button class="project-name" type="button"
+              aria-expanded="false" aria-controls="panel-yoescritor">yoescritor</button>
+    </div>
+
+    <div class="panel" id="panel-yoescritor" hidden>
+
+      <p class="panel-spec">2026 &nbsp;·&nbsp; writing companion &nbsp;·&nbsp; in design</p>
+
+      <p class="panel-label">Overview</p>
+      <p class="panel-text">
+        An AI companion for writing &mdash; one that helps you find the writer
+        already living inside you. The bet is simple: help you write better, so
+        that you keep writing at all.
+      </p>
+      <p class="panel-text">
+        It started from a personal problem. I write in notebooks and never look
+        back, because reading myself is uncomfortable &mdash; the inner critic is
+        always the cruelest one. yoescritor is meant to sit next to that voice
+        rather than replace it: closer to a note in the margin than to a chat
+        window.
+      </p>
+
+      <p class="panel-label">Demo</p>
+      <div class="video" role="img" aria-label="Demo video placeholder">
+        <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
+          <circle cx="12" cy="12" r="11" fill="none" stroke="#bbb" stroke-width="1"/>
+          <path d="M10 8.5l6 3.5-6 3.5z" fill="#bbb"/>
+        </svg>
+        <span>Coming soon</span>
+      </div>
+
+      <p class="panel-label">Writing</p>
+      <ol class="panel-list">
+        <li><span class="unpublished">Escribir casi solo <em>&mdash; draft</em></span></li>
+      </ol>
+
+      <button class="panel-close" type="button" data-closes="panel-yoescritor">Close</button>
+    </div>
+  </div>
+
+  <div class="right">
+    <p class="para">
+      If you have an idea, a question, or want to work together, feel free to
+      reach out.
+      <br>&zwnj;<br>
+      <a href="mailto:rafasacaan@gmail.com?subject=Hey%20Rafa%2C">rafasacaan@gmail.com</a><br>
+      <a href="https://www.linkedin.com/in/rafaelsacaanamunategui/" target="_blank" rel="noopener me">LinkedIn</a><br>
+      <a href="https://github.com/rafasacaan" target="_blank" rel="noopener me">GitHub</a>
+      <br>&zwnj;<br>
+      Last updated [09/08/26]
+    </p>
+  </div>
+
+</div>
+
+<script>
+  // Un solo proyecto abierto a la vez. No toca la URL: es puro despliegue.
+  (function () {
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function closeAll() {
+      document.querySelectorAll('.project-name[aria-expanded="true"]').forEach(function (open) {
+        open.setAttribute('aria-expanded', 'false');
+        document.getElementById(open.getAttribute('aria-controls')).hidden = true;
+      });
+    }
+
+    document.querySelectorAll('.project-name[aria-controls]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var panel = document.getElementById(btn.getAttribute('aria-controls'));
+        var wasOpen = btn.getAttribute('aria-expanded') === 'true';
+
+        closeAll();
+        if (wasOpen) return;
+
+        btn.setAttribute('aria-expanded', 'true');
+        panel.hidden = false;
+
+        // deja el índice a la vista junto al detalle, en vez de saltar al panel
+        btn.scrollIntoView({ block: 'center', behavior: calm ? 'auto' : 'smooth' });
+      });
+    });
+
+    document.querySelectorAll('.panel-close').forEach(function (close) {
+      close.addEventListener('click', function () {
+        var opener = document.querySelector(
+          '.project-name[aria-controls="' + close.dataset.closes + '"]'
+        );
+        closeAll();
+        opener.focus(); // el foco vuelve al nombre, no se pierde al final del documento
+      });
+    });
+
+    // Escape cierra, como cualquier cosa que se despliega
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      var open = document.querySelector('.project-name[aria-expanded="true"]');
+      if (!open) return;
+      closeAll();
+      open.focus();
+    });
+  })();
+</script>
+
+</body>
+</html>
