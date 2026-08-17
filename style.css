@@ -77,6 +77,8 @@ body{
 .para a:hover{ color:#000; }
 
 .para em{ font-style:italic; }
+/* el 700 viene pedido en el <link> de Inter, así no hay bold sintético */
+.para strong{ font-weight:700; }
 
 /* nota al pie de la columna de contacto: en cursiva y un escalón más chica,
    para que se lea como aparte y no como parte del contacto */
@@ -90,8 +92,10 @@ body{
 }
 .note em{ font-style:italic; }
 
-/* "Projects" es el mismo texto negro del cuerpo, solo separado del párrafo */
-.para--heading{ margin-top:84px; }
+/* mismo peso que el cuerpo: el espacio de arriba ya la separa de la prosa,
+   no hace falta bold para anunciar la sección */
+.para--heading{ margin-top:84px; font-weight:400; }
+.para--heading + .para--heading{ margin-top:56px; }
 
 /* ---- proyectos desplegables ---- */
 
@@ -117,6 +121,32 @@ body{
 }
 .project-name:hover{ color:#767676; }
 .project-name:focus-visible{ outline:1px solid #000; outline-offset:4px; }
+
+/* ---- lista del blog ---- */
+.bloglist{
+  list-style:none;
+  margin-top:28px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.bloglist li{
+  font-size:22px;
+  line-height:28px;
+  letter-spacing:-.2px;
+}
+/* la fecha es dato, no prosa: monoespaciada y muda para no competir con el
+   título, que es lo único clickeable de la línea */
+.blog-date{
+  font-family:ui-monospace,'SF Mono',Menlo,monospace;
+  font-size:15px;
+  letter-spacing:0;
+  color:#999;
+  margin-right:.6em;
+}
+.bloglist a{ color:#000; text-decoration:none; border-bottom:1px solid transparent; transition:color .2s, border-color .2s; }
+.bloglist a:hover{ color:#767676; border-bottom-color:#767676; }
+.bloglist a:focus-visible{ outline:1px solid #000; outline-offset:4px; }
 
 /* ---- página de proyecto ----
    comparte el ancho máximo de la portada para que las dos se alineen */
