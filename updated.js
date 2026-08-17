@@ -8,7 +8,16 @@
   var d = new Date(document.lastModified);
   if (isNaN(d)) return;
 
-  var pad = function (n) { return String(n).padStart(2, '0'); };
-  el.textContent =
-    pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(-2);
+  var MONTHS = ['January','February','March','April','May','June',
+    'July','August','September','October','November','December'];
+
+  var day = d.getDate();
+  var ordinal = function (n) {
+    if (n % 10 === 1 && n !== 11) return n + 'st';
+    if (n % 10 === 2 && n !== 12) return n + 'nd';
+    if (n % 10 === 3 && n !== 13) return n + 'rd';
+    return n + 'th';
+  };
+
+  el.textContent = MONTHS[d.getMonth()] + ' ' + ordinal(day) + ', ' + d.getFullYear();
 })();

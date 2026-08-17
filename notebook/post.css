@@ -1,17 +1,23 @@
 /* Calcado de WhitePage.astro (regardless.cl), la plantilla que usan sus
-   posts de "memoria técnica". Tres cambios respecto al original:
+   posts de "memoria técnica". Cuatro cambios respecto al original:
    1. Sin la columna de menú (.side) — .frame pasa de grid a una sola columna.
    2. Fondo blanco (#fff) en vez del gris #F5F5F5 del sitio original.
    3. El breadcrumb ya no vuelve a regardless.cl/blog/: vuelve al home de
       este sitio, y el label cambió de "Memoria técnica" a "Home".
-   El resto —tipografía, tabla de post-meta, prosa, code blocks— es el mismo
-   sistema, tal cual. */
+   4. Una sola tipografía en todo el sitio: --read (antes Lora, la serif de
+      lectura) y --serif ahora son Inter, igual que el home — ya no hay dos
+      identidades tipográficas. --mono se queda en la pila del sistema
+      (ui-monospace) en vez de cargar IBM Plex Mono como webfont: es la
+      única excepción a "todo Inter", porque un bloque de código (árbol de
+      carpetas en ASCII, alineado por columnas) se rompe visualmente en una
+      fuente proporcional. Nadie pidió eso — es una llamada de legibilidad,
+      avisar si se prefiere Inter ahí también. */
 
 :root{
-  --serif:'Fraunces',Georgia,'Times New Roman',serif;
-  --read:'Lora',Georgia,'Times New Roman',serif;
-  --sans:'Inter','Helvetica Neue',Arial,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --serif:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
+  --read:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
+  --sans:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
   --ink:#14120d; --bloom:#E0399C; --moon:#E8C87A;
   --mute:rgba(20,18,13,.45);
 }
@@ -126,6 +132,83 @@ body{ font-family:var(--sans); color:var(--ink); background:#fff; -webkit-font-s
   padding:.6em .9em; border:1px solid rgba(20,18,13,.14);
 }
 .post-body th{ font-family:var(--sans); font-weight:600; background:rgba(20,18,13,.03); }
+
+/* ---- Signals around (/signals/) ----
+   Página hermana de /notebook/: comparte este archivo de estilos. Las clases
+   siguen llamándose "extract(s)" por el nombre anterior de la página; es
+   detalle interno, no afecta lo que se ve. La lede usa la misma prosa que
+   .post-body pero vive fuera de esa clase porque no es parte de un artículo
+   con secciones — es la bajada de la página. */
+.extracts-lede{
+  font-family:var(--read); font-weight:400;
+  font-size:clamp(1.125rem,1.6vw,1.25rem); line-height:1.62; letter-spacing:-.003em;
+  color:#242018;
+  margin-top:1.5em;
+}
+
+.extracts{ margin-top:clamp(3rem,6vh,4rem); }
+
+.extracts-empty{
+  font-family:var(--read); font-style:italic; color:var(--mute);
+}
+
+.extract{
+  padding-top:2.4em; margin-top:2.4em;
+  border-top:1px solid rgba(20,18,13,.14);
+}
+.extract:first-child{ padding-top:0; margin-top:0; border-top:none; }
+
+.extract-date{
+  font-family:var(--mono); font-size:13px;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--mute);
+  margin-bottom:.9em;
+}
+
+.extract-quote{
+  font-family:var(--read); font-style:italic;
+  font-size:clamp(1.125rem,1.6vw,1.25rem); line-height:1.62; letter-spacing:-.003em;
+  color:#242018;
+}
+.extract-quote p + p{ margin-top:1em; }
+
+.extract-source{
+  margin-top:.9em;
+  font-family:var(--sans); font-size:.95rem; color:var(--mute);
+}
+.extract-source a{ color:var(--ink); text-decoration:underline; text-decoration-color:var(--bloom); text-underline-offset:3px; }
+.extract-source a:hover{ color:var(--bloom); }
+
+/* la nota propia es opcional por extract: solo aparece cuando el <p> existe */
+.extract-note{
+  margin-top:.9em;
+  font-family:var(--sans); font-size:1rem; color:var(--ink);
+}
+
+/* ---- índice de Notebook (/notebook/) ----
+   Un <li> por post, más nuevo primero. Mismo espíritu que .extracts: el id
+   y la fecha son dato (mono, mudo), el título es lo único clickeable. */
+.postlist{
+  list-style:none;
+  margin-top:clamp(3rem,6vh,4rem);
+}
+.postlist li{
+  padding:1.4em 0;
+  border-top:1px solid rgba(20,18,13,.14);
+}
+.postlist li:last-child{ border-bottom:1px solid rgba(20,18,13,.14); }
+.postlist-meta{
+  font-family:var(--mono); font-size:13px;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--mute);
+  margin-bottom:.5em;
+}
+.postlist-title{
+  display:block;
+  font-family:var(--sans); font-weight:700;
+  font-size:clamp(1.3rem,2.4vw,1.6rem); line-height:1.25; letter-spacing:-.02em;
+  color:var(--ink); text-decoration:none;
+}
+.postlist-title:hover{ color:var(--bloom); }
+.postlist-title:focus-visible{ outline:1px solid var(--ink); outline-offset:4px; }
 
 @media (max-width:760px){
   .frame{ padding:clamp(1.6rem,6vh,3rem) 24px; }

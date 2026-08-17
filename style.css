@@ -69,6 +69,34 @@ body{
   max-width:100%;
 }
 
+/* la columna de contacto/nav lee un escalón más chica que la bio: es
+   navegación, no prosa a desarrollar, no necesita el mismo peso */
+.right .para{ font-size:18px; line-height:25px; }
+
+/* bajada de un heading (Say hi, Personal notebook): pegada arriba
+   (margin-top:8px, ver .para--tight), en cursiva y muda para leerse como
+   subtítulo, no como link */
+.section-tagline{
+  margin-top:8px;
+  font-family:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
+  font-style:italic;
+  font-size:15px;
+  line-height:21px;
+  letter-spacing:-.1px;
+  color:#767676;
+}
+
+/* "Last updated" es la línea menos importante de la página: la más chica
+   de todas, en cursiva, para que no compita ni con el nav ni con la nota */
+.updated-line{
+  font-family:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
+  font-style:italic;
+  font-size:14px;
+  line-height:20px;
+  letter-spacing:-.1px;
+  color:#767676;
+}
+
 .para a{
   color:#767676;
   text-decoration:none;
@@ -80,25 +108,27 @@ body{
 /* el 700 viene pedido en el <link> de Inter, así no hay bold sintético */
 .para strong{ font-weight:700; }
 
-/* nota al pie de la columna de contacto: en cursiva y un escalón más chica,
-   para que se lea como aparte y no como parte del contacto */
-.note{
-  margin-top:28px;
-  font-size:17px;
-  line-height:25px;
-  letter-spacing:-.1px;
-  color:#767676;
-  max-width:30ch;
-}
-.note em{ font-style:italic; }
-
 /* mismo peso que el cuerpo: el espacio de arriba ya la separa de la prosa,
-   no hace falta bold para anunciar la sección. Mayúscula para que "Projects",
+   no hace falta bold para anunciar la sección. Mayúscula para que "Atelier",
    "Blog" y cualquier título de sección que se agregue después se lean como
    rótulos, no como más prosa — a diferencia de los nombres propios de abajo
    (yoescritor, los títulos de los posts), que se quedan en minúscula. */
 .para--heading{ margin-top:84px; font-weight:400; text-transform:uppercase; letter-spacing:.04em; }
 .para--heading + .para--heading{ margin-top:56px; }
+/* "Say hi" es el primer elemento de .right — sin este reset, heredaría el
+   margen pensado para separarse de un párrafo anterior y quedaría
+   desalineado con el arranque de la bio en .left */
+.para--first{ margin-top:0; }
+/* espaciador genérico de 28px — el mismo aire que .projects/.bloglist dejan
+   bajo su heading. Sirve tanto para el párrafo que sigue a un heading como
+   para separar bloques sueltos dentro de la misma columna (ej. "Last
+   updated" después de los links de Personal notebook). */
+.para--after-heading{ margin-top:28px; }
+/* espaciador chico (8px, casi solo el line-height) — para cuando dos líneas
+   son parte del mismo bloque visual y no de secciones distintas, como el
+   heading/tagline/links de "Personal notebook", que deben leerse pegados
+   entre sí en vez de separados como Atelier y Blog lo están. */
+.para--tight{ margin-top:8px; }
 
 /* ---- proyectos desplegables ---- */
 
