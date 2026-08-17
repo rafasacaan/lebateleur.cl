@@ -39,6 +39,14 @@
      h1: es el punto de entrada para lectores de pantalla y buscadores. -->
 <h1 class="vh">Rafa Sacaan</h1>
 
+<!-- Solo visible en mobile (ver @media en style.css): abre/cierra .right
+     como panel flotante en vez de dejarlo siempre debajo de la bio. -->
+<button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="rightPanel" aria-label="Open menu">
+  <span class="menu-toggle-bar"></span>
+  <span class="menu-toggle-bar"></span>
+  <span class="menu-toggle-bar"></span>
+</button>
+
 <div class="all">
 
   <div class="left">
@@ -84,7 +92,7 @@
     </ul>
   </div>
 
-  <div class="right">
+  <div class="right" id="rightPanel">
     <h2 class="para para--heading para--first">Say hi</h2>
     <p class="section-tagline"><em>Find me here, or write</em></p>
     <p class="para para--tight">
@@ -110,7 +118,48 @@
 
 </div>
 
+<footer class="site-footer">
+  <p>&copy; 2026 Rafa Sacaan &middot; Santiago, Chile</p>
+</footer>
+
 <script src="/updated.js"></script>
+<script>
+(function () {
+  var btn = document.getElementById('menuToggle');
+  var panel = document.getElementById('rightPanel');
+  if (!btn || !panel) return;
+
+  function close() {
+    btn.setAttribute('aria-expanded', 'false');
+    panel.classList.remove('menu-open');
+  }
+  function open() {
+    btn.setAttribute('aria-expanded', 'true');
+    panel.classList.add('menu-open');
+  }
+
+  btn.addEventListener('click', function () {
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    if (isOpen) { close(); } else { open(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') close();
+  });
+
+  document.addEventListener('click', function (e) {
+    if (btn.getAttribute('aria-expanded') !== 'true') return;
+    if (panel.contains(e.target) || btn.contains(e.target)) return;
+    close();
+  });
+
+  /* si la ventana crece más allá del breakpoint con el menú abierto, no
+     quede atrapado en el estado "abierto" cuando .right vuelve a la columna */
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 760) close();
+  });
+})();
+</script>
 
 </body>
 </html>

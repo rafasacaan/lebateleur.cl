@@ -32,9 +32,13 @@ body{
   line-height:20px;
   -webkit-font-smoothing:antialiased;
   margin-top:100px;
+  /* column, no longer row: .all and .site-footer stack instead of sitting
+     side by side. align-items:center does the job justify-content used to
+     do when .all was the only child. */
   display:flex;
-  justify-content:center;
-  padding:0 24px 100px;
+  flex-direction:column;
+  align-items:center;
+  padding:0 24px;
 }
 
 .all{
@@ -336,8 +340,53 @@ body{
 .panel-close:hover{ color:#000; }
 .panel-close:focus-visible{ outline:1px solid #000; outline-offset:4px; }
 
+/* ---- footer ---- */
+.site-footer{
+  width:100%;
+  max-width:1106px;
+  margin-top:96px;
+  padding:32px 0 100px;
+  border-top:1px solid #ebebeb;
+}
+.site-footer p{
+  font-family:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
+  font-size:13px;
+  letter-spacing:.02em;
+  color:#999;
+}
+
+/* ---- botón de hamburguesa (solo mobile) ----
+   en desktop .right ya está siempre visible en su columna, así que el botón
+   no existe ahí — display:none hasta que la media query lo prenda */
+.menu-toggle{
+  display:none;
+  position:fixed;
+  top:16px;
+  right:16px;
+  z-index:60;
+  width:36px;
+  height:36px;
+  background:#fff;
+  border:0;
+  padding:0;
+  cursor:pointer;
+}
+.menu-toggle-bar{
+  display:block;
+  width:22px;
+  height:2px;
+  margin:5px auto;
+  background:#000;
+  transition:transform .2s ease, opacity .2s ease;
+}
+/* al abrir, las tres barras se convierten en una × */
+.menu-toggle[aria-expanded="true"] .menu-toggle-bar:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.menu-toggle[aria-expanded="true"] .menu-toggle-bar:nth-child(2){ opacity:0; }
+.menu-toggle[aria-expanded="true"] .menu-toggle-bar:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+.menu-toggle:focus-visible{ outline:1px solid #000; outline-offset:4px; }
+
 @media (max-width:760px){
-  body{ margin-top:56px; padding:0 24px 56px; }
+  body{ margin-top:56px; padding:0 24px; }
   .all{ flex-direction:column; gap:40px; }
   .left, .right{ max-width:100%; flex:none; padding-right:0; margin-top:0; }
   /* el cuerpo del proyecto acompaña a la portada también acá */
@@ -351,4 +400,27 @@ body{
   .bar-home{ flex:1 1 auto; font-size:18px; line-height:24px; }
   .bar-close{ order:2; }
   .bar-name{ order:3; flex-basis:100%; margin-left:0; font-size:18px; line-height:24px; }
+
+  .site-footer{ padding:32px 0 56px; }
+
+  /* Say hi + Personal notebook salen del flujo normal y se abren como un
+     panel flotante desde el botón de hamburguesa, en vez de vivir siempre
+     debajo de la bio como una tercera sección larga */
+  .menu-toggle{ display:block; }
+  .right{
+    display:none;
+    position:fixed;
+    top:64px;
+    right:16px;
+    left:16px;
+    max-height:calc(100vh - 88px);
+    overflow-y:auto;
+    background:#fff;
+    border:1px solid #ebebeb;
+    border-radius:8px;
+    box-shadow:0 12px 32px rgba(0,0,0,.14);
+    padding:24px;
+    z-index:55;
+  }
+  .right.menu-open{ display:block; }
 }
