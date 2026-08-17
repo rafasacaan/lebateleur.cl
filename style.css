@@ -93,8 +93,11 @@ body{
 .note em{ font-style:italic; }
 
 /* mismo peso que el cuerpo: el espacio de arriba ya la separa de la prosa,
-   no hace falta bold para anunciar la sección */
-.para--heading{ margin-top:84px; font-weight:400; }
+   no hace falta bold para anunciar la sección. Mayúscula para que "Projects",
+   "Blog" y cualquier título de sección que se agregue después se lean como
+   rótulos, no como más prosa — a diferencia de los nombres propios de abajo
+   (yoescritor, los títulos de los posts), que se quedan en minúscula. */
+.para--heading{ margin-top:84px; font-weight:400; text-transform:uppercase; letter-spacing:.04em; }
 .para--heading + .para--heading{ margin-top:56px; }
 
 /* ---- proyectos desplegables ---- */
@@ -107,20 +110,36 @@ body{
   align-items:flex-start;
 }
 
-/* en versalitas y negro: los proyectos son lo único de la portada que lleva
-   a otra parte, así que pesan más que el resto del texto */
+/* fila de un proyecto: el nombre + un tag opcional de estado, en la misma
+   línea. Cuando no hay tag, project-row es solo el link. */
+.project-row{
+  display:flex;
+  align-items:baseline;
+  gap:.7em;
+}
+
+/* negro: los proyectos son lo único de la portada que lleva a otra parte,
+   así que pesan más que el resto del texto */
 .project-name{
   display:inline-block;
   font-size:22px;
   line-height:30px;
-  letter-spacing:0;
-  text-transform:uppercase;
+  letter-spacing:-.2px;
   color:#000;
   text-decoration:none;
   transition:color .2s;
 }
 .project-name:hover{ color:#767676; }
 .project-name:focus-visible{ outline:1px solid #000; outline-offset:4px; }
+
+/* tag de estado junto al nombre: mudo y chico, no compite con el link */
+.project-tag{
+  font-family:ui-monospace,'SF Mono',Menlo,monospace;
+  font-size:13px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#999;
+}
 
 /* ---- lista del blog ---- */
 .bloglist{
@@ -135,8 +154,9 @@ body{
   line-height:28px;
   letter-spacing:-.2px;
 }
-/* la fecha es dato, no prosa: monoespaciada y muda para no competir con el
-   título, que es lo único clickeable de la línea */
+/* el id y la fecha son dato, no prosa: monoespaciados y mudos para no
+   competir con el título, que es lo único clickeable de la línea */
+.blog-id,
 .blog-date{
   font-family:ui-monospace,'SF Mono',Menlo,monospace;
   font-size:15px;

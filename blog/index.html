@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An architecture playbook — Rafa Sacaan</title>
+<meta name="description" content="Destilé cuatro recetas de arquitectura en una guía genérica: la tabla para elegir stack, el mapa de carpetas, las reglas de oro por capa, y un checklist de arranque que uso en cualquier proyecto nuevo.">
+<meta property="og:title" content="An architecture playbook">
+<meta property="og:description" content="Destilé cuatro recetas de arquitectura en una guía genérica: la tabla para elegir stack, el mapa de carpetas, las reglas de oro por capa, y un checklist de arranque que uso en cualquier proyecto nuevo.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://rafasacaan.com/blog/">
+<meta property="og:image" content="https://rafasacaan.com/blog/og-blog.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="An architecture playbook">
+<meta name="twitter:description" content="Destilé cuatro recetas de arquitectura en una guía genérica: la tabla para elegir stack, el mapa de carpetas, las reglas de oro por capa, y un checklist de arranque que uso en cualquier proyecto nuevo.">
+<meta name="twitter:image" content="https://rafasacaan.com/blog/og-blog.png">
+<link rel="canonical" href="https://rafasacaan.com/blog/">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<!-- Tipografía propia del post, calcada de "memoria técnica" en regardless.cl:
+     Inter para títulos, Lora para el cuerpo, IBM Plex Mono para la meta y el
+     código. Es distinta a la Inter-sola del resto de rafasacaan.com a
+     propósito: este post conserva su identidad original. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Lora:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/blog/post.css">
+</head>
+<body>
+
+<!-- Réplica del post en regardless.cl, sin la columna de menú, sobre blanco.
+     El breadcrumb que decía "‹ Memoria técnica" ahora vuelve al home de este
+     sitio en vez de al índice de regardless.cl. -->
+<div class="frame">
+  <a class="volver" href="/"><span class="chev">&lsaquo;</span> Home</a>
+
+  <article class="post">
+    <p class="post-meta">
+      <span class="post-id">001</span> &middot; <time datetime="2026-08-01">1 de agosto de 2026</time> &middot; 14 min de lectura
+    </p>
+    <h1 class="post-title">An architecture playbook <span class="post-lang-tag">En español</span></h1>
+    <div class="post-body">
+<p>Cada vez que empiezo un proyecto de cero me doy cuenta de que repito las mismas decisiones de arquitectura, y no las tengo escritas en ningún lado. Este post es ese lugar. Es la destilación de cuatro recetas en una guía genérica.</p>
+<h2>0. Ports &amp; Adapters (arquitectura hexagonal)</h2>
+<p>Respetar las siguientes reglas:</p>
+<ol>
+<li><strong>Núcleo (core/domain)</strong> — la lógica de negocio. No sabe de HTTP, SQL, ni de qué LLM uso.</li>
+<li><strong>Puertos</strong> — los contratos/interfaces. Definen <strong>qué</strong> se puede hacer, no cómo.</li>
+<li><strong>Adaptadores</strong> — la implementación concreta de un puerto (Postgres, Firebase, Gemini, Stripe...). El <strong>cómo</strong>.</li>
+</ol>
+<p>Es buena práctica hacer esta separación mental y proyectarla en las carpetas del proyecto desde el primer día. La disciplina es ubicar en la carpeta correcta cada cosa, no en clases extra.</p>
+<h2>1. Elegir el stack: la tabla de decisión</h2>
+<p>Antes de cualquier cosa, es buena práctica hacerse algunas preguntas. Cada fila fuerza a que la elección tenga un por qué explícito:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pieza</th>
+<th>Pregunta que responde</th>
+<th>Ejemplo de criterio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend</td>
+<td>¿bloqueante o no?</td>
+<td>Async si voy a esperar mucho I/O (LLM, red)</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>¿necesito SSR?</td>
+<td>No si es una SPA/dashboard; sí si importa SEO/carga inicial</td>
+</tr>
+<tr>
+<td>Paquetes</td>
+<td>¿reproducible en otra máquina?</td>
+<td>Gestor con lockfile (uv, npm con package-lock, etc.)</td>
+</tr>
+<tr>
+<td>Streaming</td>
+<td>¿reconexión automática, un solo sentido?</td>
+<td>SSE &gt; WebSockets si el flujo es servidor→cliente</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>¿login social, cuánto control necesito?</td>
+<td>Proveedor gestionado (Firebase/Auth0) &gt; rodar el mío</td>
+</tr>
+<tr>
+<td>Base de datos</td>
+<td>¿mismo motor en dev y prod?</td>
+<td>Sí, siempre — evita sorpresas de compatibilidad</td>
+</tr>
+<tr>
+<td>Infra local</td>
+<td>¿se parece a producción?</td>
+<td>Docker Compose <em>si prod es un contenedor propio</em>; si la plataforma buildea por mí (Railway, etc.), proceso directo + BD gestionada</td>
+</tr>
+</tbody>
+</table></div>
+<p>Regla general: prioriza piezas aburridas (maduras, bien documentadas) sobre piezas de moda. <strong>La complejidad interesante debería estar en la lógica de negocio, no peleando con tooling.</strong></p>
+<h2>2. El mapa de carpetas — dibújalo antes de escribir código</h2>
+<p>Aunque construya solo el 10% al principio, defino el árbol completo desde el día 1. Así cada archivo nuevo sabe dónde vive antes de que exista:</p>
+<pre><code>app/
+│
+├── main.py / index.ts        ← arma la app, middlewares, registra rutas
+│
+├── api/                      🟢 ADAPTADOR DE ENTRADA — HTTP
+│   ├── &lt;recurso&gt;.py             endpoints, delgados (5-10 líneas)
+│   └── dependencies.py          inyección de sesión/auth
+│
+├── domain/                   🔵 NÚCLEO — lógica de negocio
+│   ├── dtos.py                   contratos de la API (entrada/salida)
+│   └── services/
+│       └── &lt;recurso&gt;_service.py  validación + autorización + orquestación
+│
+├── persistence/               🟠 ADAPTADOR DE SALIDA — base de datos
+│   ├── models.py                  modelos ORM (forma de la BD)
+│   └── repositories/
+│       └── &lt;recurso&gt;_repo.py      el único lugar que toca SQL
+│
+├── agents/ (o integrations/)  🟠 ADAPTADOR DE SALIDA — servicios externos (LLM, pagos, email)
+│   └── aislado, swappable
+│
+└── core/                       ⚙️ PLOMERÍA TRANSVERSAL (no es negocio)
+    ├── settings.py               config, fail-fast
+    ├── database.py               engine + gestión de transacción
+    ├── logging.py                logs estructurados + request_id
+    └── auth.py                   verificación de identidad
+</code></pre>
+<p>Cada carpeta tiene <strong>un solo trabajo</strong>. Cuando dudo dónde poner algo nuevo, me pregunto: ¿esto es HTTP (→ api/), es una regla de negocio (→ domain/), es acceso a un sistema externo (→ persistence/ o el adaptador que corresponda), o es plomería que todos usan pero no es negocio (→ core/)?</p>
+<h2>3. Reglas de oro por capa</h2>
+<p><strong>Config (<code>core/settings.py</code>)</strong></p>
+<ul>
+<li>Una sola fuente de verdad, leída de variables de entorno. Nunca duplico config por feature.</li>
+<li><em>Fail fast</em>: si falta una variable obligatoria o no cuadra, la app <strong>no arranca</strong>. Nunca un <code>None</code> silencioso que explota tres capas más adentro.</li>
+<li>Orden de resolución: env del sistema &gt; <code>.env</code> &gt; default en código. Así Docker/K8s pueden sobreescribir sin tocar archivos.</li>
+<li>Secretos nunca van a git. <code>.env.example</code> sí (plantilla sin valores reales).</li>
+<li>Trato como comprometido cualquier secreto que haya pasado por un chat, screenshot, log o commit (aunque lo borre después): rotarlo es barato, asumir que nadie lo vio es caro.</li>
+<li>Ojo con instanciar al importar (<code>settings = Settings()</code> a nivel de módulo): el fail-fast es bueno, pero significa que <em>cualquier</em> import del módulo explota si falta una env var — incluyendo un test que solo quería una función pura. Alternativa barata cuando eso empieza a doler: una factory <code>get_settings()</code> con <code>@lru_cache</code> (el patrón que recomienda la doc de FastAPI) — mismo fail-fast, pero diferido al primer uso real y fácil de sobreescribir en tests.</li>
+</ul>
+<p><strong>Base de datos / transacciones (<code>core/database.py</code>)</strong></p>
+<ul>
+<li>Una sola pieza es dueña de la transacción (típicamente la función que inyecta la sesión). Confirma si todo salió bien, revierte si algo falló. Repositorios y services <strong>nunca</strong> abren ni cierran transacciones a mano.</li>
+<li><code>flush()</code> (manda el SQL, no cierra la transacción) vs <code>commit()</code> (cierra y confirma) — solo la capa dueña de la transacción hace <code>commit</code>.</li>
+<li>Cuidado con el <code>commit()</code> después del <code>yield</code> en la función que inyecta la sesión: corre <em>fuera</em> del try/except del endpoint, así que un error de commit (constraint violada, conexión caída) sale como 500 crudo que ningún handler puede atrapar. Lo asumo y lo monitoreo, o capturo la excepción en la propia función dueña de la transacción y la traduzco ahí.</li>
+<li>Fechas: UTC en la base, zona horaria en los bordes. Timestamps siempre <code>TIMESTAMPTZ</code> en UTC. Y ojo con la lógica de "hoy": el servidor de producción casi siempre corre en UTC, así que <code>date.today()</code> cambia de día a otra hora que la del usuario (en Chile, a las 20:00–21:00). Toda regla de negocio que dependa del día ("el registro de hoy", "lo de ayer") debe calcular la fecha con la zona horaria del usuario explícita, nunca con la del servidor.</li>
+<li>Health check real: verifica que la BD <strong>responde</strong> (<code>SELECT 1</code>), no solo que el proceso corre. Pero distingo <strong>liveness</strong> (¿el proceso vive? → reiniciarlo puede ayudar) de <strong>readiness</strong> (¿puede atender tráfico? → si la BD está caída, reiniciar mi app no arregla nada). Si la plataforma reinicia el servicio cuando <code>/health</code> falla, y <code>/health</code> falla porque la <em>BD</em> está caída, entro en un loop de reinicios inútil: reporto el estado de la BD en el body, y decido el status code (200 vs 503) según quién consume el endpoint.</li>
+</ul>
+<p><strong>Modelos vs DTOs</strong></p>
+<ul>
+<li>El modelo interno (ORM) es la forma de la base de datos. El DTO es el contrato de la API. Nunca son el mismo objeto, aunque a veces se parezcan.</li>
+<li>Cuatro razones para no devolver el modelo directo: no exponer columnas internas, permitir campos calculados que no existen como columna, validar lo que entra sin <code>if</code>s a mano, y desacoplar — un cambio de esquema no debería romper a quien consume la API.</li>
+<li>DTOs de entrada validan estructura (longitud, tipos, enums) → error 422/400 automático. Las reglas de negocio (ownership, cuotas, estado) van en el service, no en el DTO.</li>
+</ul>
+<p><strong>Repositorios / adaptadores de salida</strong></p>
+<ul>
+<li>El repositorio es el único lugar que sabe el detalle de la tecnología (SQL, llamada HTTP a un proveedor). Recibe parámetros, devuelve datos — nunca sabe de HTTP ni de reglas de negocio.</li>
+<li>Cuidado con N+1: si voy a listar N registros y por cada uno hago otra query, son N+1 llamadas. Se resuelve con un JOIN/agregación en una sola query.</li>
+<li>En Python, la clase-singleton (<code>user_repo = UserRepository()</code>) es ceremonia: funciones planas en un módulo logran exactamente lo mismo mientras no necesite polimorfismo (ej. un repo fake para tests que no quiera resolver con mocks). Empiezo simple; la clase se gana su lugar después.</li>
+</ul>
+<p><strong>Services (el núcleo)</strong></p>
+<ul>
+<li>Acá vive la validación, la autorización y la orquestación. Recibe identificadores primitivos (<code>user_id: int</code>), nunca un objeto HTTP. Devuelve DTOs, nunca modelos internos.</li>
+<li>Dos tipos de error típicos que el service levanta y la capa de entrada traduce a códigos HTTP: error de validación (→ 400) y error de permisos (→ 403).</li>
+<li>403 vs 404 es un trade-off, no una regla: el 403 explícito facilita el debugging, pero le <em>confirma</em> a un atacante que el recurso existe (habilita enumerar IDs); el 404 lo esconde — por eso GitHub responde 404 en repos privados ajenos. Mi criterio: API interna o de pocos usuarios conocidos → 403; API pública → 404. Lo innegociable es decidirlo una vez y ser consistente en todo el proyecto.</li>
+<li>Cualquier regla de negocio nueva (cuotas, límites de uso, feature flags) entra aquí, nunca en el endpoint ni en el repositorio.</li>
+</ul>
+<p><strong>Endpoints / adaptador de entrada</strong></p>
+<ul>
+<li>Delgadísimos (5-10 líneas): sacar datos del request, llamar al service, traducir excepciones a códigos HTTP, devolver la respuesta. Cero SQL, cero reglas de negocio.</li>
+<li>Un router/handler solo existe para el mundo cuando se registra explícitamente en el punto de entrada de la app.</li>
+</ul>
+<p><strong>Tests</strong></p>
+<ul>
+<li>Testeo cada capa con el reemplazo natural de sus bordes: <strong>services</strong> con repos falsos (funciones o clases fake escritas a mano, no mocks de framework), <strong>repos</strong> contra una BD real (Postgres efímero o de test — no SQLite: cambiar de motor invalida justo lo que el test debía validar), <strong>endpoints</strong> con el test client sobre la app armada.</li>
+<li>La pirámide para esta arquitectura: muchos tests de service (ahí vive la lógica y corren rápido), algunos de repo (validan el SQL real), pocos end-to-end (el camino feliz completo).</li>
+<li>Si un test necesita tres mocks para arrancar, el diseño está gritando: probablemente hay lógica en la capa equivocada.</li>
+</ul>
+<p><strong>Servicios externos / LLM / integraciones</strong></p>
+<ul>
+<li>Viven aislados en su propia carpeta, tratados como cualquier otro adaptador de salida — misma posición en el hexágono que la base de datos, distinta tecnología.</li>
+<li>El endpoint que los expone (streaming, webhook) es mío: traduce el contrato de la librería externa a mi propio contrato de eventos/respuesta. No dejo que el formato de un proveedor externo se filtre hasta el frontend.</li>
+<li>Si el proveedor tiene su propio almacenamiento de sesión/estado, le doy su propio espacio (base de datos separada, prefijo de tablas) para que no choque con mis tablas.</li>
+<li>Si el adaptador es un LLM: registro tokens de entrada y salida <strong>por llamada, desde el día uno</strong> (cuestan distinto). El costo es un bug silencioso — sin medición, me entero con la factura.</li>
+</ul>
+<p><strong>Auth</strong></p>
+<ul>
+<li>Distingo el mecanismo por tipo de transporte: si el cliente puede mandar headers (fetch), uso un token en <code>Authorization</code>. Si no puede (ej. <code>EventSource</code>/SSE), uso una cookie firmada, con el alcance más chico posible.</li>
+<li>El proveedor de identidad es un adaptador de salida más: "dame un token, te digo quién es". Cambiar de proveedor no debería tocar el 95% del código de auth.</li>
+<li>Traduzco el id externo del proveedor a mi propio id interno una sola vez, en un service dedicado.</li>
+<li>Calculo los atributos de cookie (<code>SameSite</code>, <code>Secure</code>) según el entorno, nunca hardcodeados.</li>
+</ul>
+<p><strong>Observabilidad / logs</strong></p>
+<ul>
+<li>Logs estructurados (JSON), no texto libre.</li>
+<li>Cada request lleva un id único que viaja por todos sus logs (uso el mecanismo de contexto nativo del lenguaje, no lo paso a mano por cada función).</li>
+<li>Middleware de timeout: cualquier request colgado debe cortarse solo, para no ocupar recursos para siempre.</li>
+</ul>
+<p><strong>Infra / Docker</strong></p>
+<ul>
+<li>Compose solo si mi producción es un contenedor que yo defino. Si despliego a una plataforma que buildea por mí (Railway, Render, Heroku-like) con base de datos gestionada, un Compose local es andamiaje que no se parece a nada real: corro el proceso directo (<code>uv run uvicorn ...</code>) y me conecto a la BD gestionada. Las reglas de abajo aplican cuando el contenedor sí es mío.</li>
+<li>El nombre del proyecto de Compose no puede quedar implícito (por defecto usa el nombre de la carpeta) — dos proyectos con carpetas <code>infra/</code> homónimas pueden compartir volúmenes por accidente. Lo nombro explícito.</li>
+<li>En el Dockerfile: lo que cambia poco (dependencias) va primero, lo que cambia siempre (código) va al final.</li>
+<li><code>depends_on</code> con healthcheck, especialmente para la base de datos.</li>
+<li>Un solo comando debería levantar todo el stack local.</li>
+</ul>
+<p><strong>Migraciones de esquema</strong></p>
+<ul>
+<li>Nunca toco el esquema a mano. Cambio el modelo → genero la migración → <strong>reviso el diff generado</strong> → aplico.</li>
+</ul>
+<p><strong>Resiliencia</strong></p>
+<ul>
+<li>Webhooks de entrada: asumo duplicados. Todo proveedor serio (Telegram, Stripe, GitHub) reintenta si no respondo 2xx a tiempo — el mismo evento puede llegarme dos veces. Dedupe por el id del evento (<code>update_id</code> en Telegram, <code>event.id</code> en Stripe, delivery id en GitHub), respondo 200 rápido, y muevo el procesamiento lento fuera del request si amenaza el timeout del proveedor. La meta es idempotencia: procesar el mismo evento dos veces debe dejar el sistema igual que una.</li>
+<li>Identifico qué errores son transitorios (rate limit, sobrecarga) vs permanentes, y solo reintento los transitorios, con backoff exponencial.</li>
+<li>Cuidado con el streaming: una vez que empecé a emitir datos al cliente, no puedo reintentar sin duplicar la salida. Reintento solo <em>antes</em> del primer byte/token emitido.</li>
+<li>Un backup no existe hasta que lo restauré. Sé dónde están los backups de mi BD (gestionada o propia) y pruebo el restore una vez, antes de necesitarlo de verdad.</li>
+</ul>
+<h2>4. Checklist para arrancar un proyecto nuevo</h2>
+<ol>
+<li>Lleno la tabla de stack (sección 1) — una fila por pieza, con el <em>por qué</em>.</li>
+<li>Dibujo el árbol de carpetas completo (sección 2), aunque solo cree las de la primera etapa.</li>
+<li>Settings con fail-fast antes que cualquier otra cosa.</li>
+<li>Conexión a datos + gestión de transacción — decido de una vez quién hace commit/rollback.</li>
+<li>Logs estructurados + request id — los voy a necesitar desde el primer bug.</li>
+<li>Un <code>/health</code> real que valide dependencias, no solo "el proceso vive".</li>
+<li>Un comando único para levantar todo (Compose con nombre explícito si prod es un contenedor propio; el proceso directo + BD gestionada si la plataforma buildea por mí).</li>
+<li>Recién ahí: modelos → migraciones → repositorios → DTOs → services → endpoints, en ese orden.</li>
+<li>Auth cuando haya algo que proteger — no antes, no después.</li>
+<li>Adaptadores externos (LLM, pagos, terceros) al final, aislados en su propia carpeta, hablando el contrato que yo definí.</li>
+</ol>
+<h2>5. Antipatrones a evitar</h2>
+<ul>
+<li>Un endpoint con SQL adentro, o un service que arma HTTPException — mezclaste capas.</li>
+<li>Un repositorio que decide si un usuario tiene permiso para algo — eso es lógica de negocio, va en el service.</li>
+<li>Config leída directo de <code>os.environ</code> en medio del código de negocio.</li>
+<li>Devolver el modelo ORM/interno directo desde un endpoint.</li>
+<li>Cualquier <code>db.begin()</code> fuera de la única función dueña de la transacción.</li>
+<li>Cookies/tokens con atributos hardcodeados que "funcionan en mi máquina" pero no en producción.</li>
+<li>Reintentar un stream completo después de haber emitido datos parciales.</li>
+<li>Un webhook que procesa eventos sin dedupe por id — el primer reintento del proveedor duplica datos.</li>
+<li>Dos proyectos Docker con el mismo nombre implícito compartiendo volúmenes sin darse cuenta.</li>
+</ul>
+<hr />
+<p><em>Crédito: la arquitectura de base viene de la serie "Building a Production-Ready Agent Stack" de Bedir Tapkan (<a href="https://bedirtapkan.com" target="_blank" rel="noopener">bedirtapkan.com</a>), que adapté en una serie de proyectos anteriores. Esto es la generalización de esas reglas para cualquier proyecto nuevo.</em></p>
+    </div>
+  </article>
+</div>
+
+</body>
+</html>
