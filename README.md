@@ -1,152 +1,191 @@
-# rafasacaan.com
+# lebateleur.cl
 
 Personal site. Static HTML and CSS — no build step, no dependencies.
 
 ```
-index.html          home page: bio, Atelier, Writing, Say hi, Personal notebook
+index.html          home page: bio, Taller, Experimentos y registros, right column
 style.css            layout and type for the home page and project pages
-updated.js            "Last updated" reads the page's Last-Modified header
+updated.js            "Última actualización" reads the page's Last-Modified header
 og.png, favicon*, apple-touch-icon.png   home page icons and link preview
 404.html             custom 404, in the site's own type instead of GitHub's
 
 yoescritor/index.html   a project page — its own URL, own og:image
 
-notebook/index.html          the Notebook INDEX — lists posts, links to each one
-notebook/post.css             shared stylesheet for every /notebook/ page and /signals/
+notebook/index.html          "Notas técnicas" — the blog INDEX, lists posts
+notebook/post.css             shared stylesheet for /notebook/ and /signals/
 notebook/og-notebook.png      og:image for the index (not any single post)
 notebook/an-architecture-playbook/index.html   post 001, its own URL
 notebook/an-architecture-playbook/og-blog.png  that post's own og:image
 
-signals/index.html      running, append-only page of quoted paragraphs
+signals/index.html      "Bloc de notas" — the other blog INDEX, empty for now
 signals/og-signals.png
 
 CNAME                 custom domain for GitHub Pages
 robots.txt, sitemap.xml
 ```
 
-Deployed from `main` via GitHub Pages.
+Deployed from `main` via GitHub Pages, at **lebateleur.cl**. The GitHub repo
+is `rafasacaan/lebateleur.cl`. `rafasacaan.com` is a domain the same person
+owns but it no longer serves this site — its A records were removed on
+purpose, so it resolves to nothing.
 
-## The names mean something — don't "fix" them
+The site is in Spanish (`lang="es"` on every page). The one exception is the
+first post's title, "An architecture playbook", which stayed in English while
+its body is in Spanish — that's what the `.post-lang-tag` pill next to it
+announces.
 
-The section headings are deliberate, not placeholder copy:
+## Routes don't match their labels — that's known
 
-- **Atelier** (not "Projects") — these aren't finished portfolio pieces, they're
-  product hypotheses being built and tested in public.
-- **Writing** (left column, under Atelier) — a plain list of posts on the home
-  page itself. Each title links **straight to the post**, never through
-  `/notebook/`. This is the primary, portfolio-facing view of the writing.
-- **Personal notebook** (right column, tagline "Raw parts & pieces") — groups
-  **Signals around** and **Notebook**. The unpolished, behind-the-scenes
-  corner, not the portfolio.
-- **Notebook** (the link inside Personal notebook) — goes to `/notebook/`,
-  the **index** page that lists every post. This is the secondary, "browse
-  everything" view of the same posts Writing already lists.
-- **Say hi** — the contact heading, deliberately informal.
+Two sections were renamed after their folders already existed, and the URLs
+were left alone so published links keep working:
 
-Writing and Notebook are two different doors into the same posts — one
-inline on the home page (a title takes you straight to the article), one a
-dedicated index page (browse, then click through). Don't collapse them into
-one link; that was tried and un-done on purpose.
+| Label on screen  | Actual route |
+|------------------|--------------|
+| Bloc de notas    | `/signals/`  |
+| Notas técnicas   | `/notebook/` |
 
-## One typeface, one stylesheet each
+Don't "fix" this by renaming the folders unless you also update every
+canonical, `og:url`, the sitemap, and accept that
+`/notebook/an-architecture-playbook/` breaks for anyone who linked to it.
 
-Every page on the site renders in Inter (`'Neue Haas Unica','Inter',...` —
-see the note in `style.css` about the paid fallback). The home page and
-project pages (`index.html`, `yoescritor/`, `404.html`) use `style.css`;
-every page under `/notebook/` and `/signals/` uses `notebook/post.css`
-instead — two files because the layouts differ (the `.frame`/`.post` reading
-column, ported from regardless.cl's "memoria técnica" template, vs. the
-two-column home), not because the type does.
+## The names mean something — don't "fix" them either
 
-`notebook/post.css`'s `--mono` is the one exception: real code blocks (the
-ASCII folder tree in the architecture post) stay on the system monospace
-stack, because aligning columns of text only works in a fixed-width font —
-everything else in that file, including what used to be `--read` (Lora) and
-`--serif` (Fraunces), now resolves to the same Inter as the home page.
+- **le bateleur** — the site's name, the first card of the Marseille tarot
+  (the juggler / the magician): all the tools on the table, nothing decided
+  yet. Set in Corinthia, in `#FA2742`. It is the page's `<h1>`.
+- **EN CONSTRUCCIÓN** — the status label under the wordmark. It's honest, not
+  a placeholder to delete once things feel finished.
+- **Taller** (not "Proyectos") — these aren't finished portfolio pieces,
+  they're product hypotheses being built and tested in public.
+- **Experimentos y registros** (left column, the big one) — ideas actually put
+  to the test, *with evidence* of whether they moved the angle on something.
+  This is the site's important output, and the bar is high. **It is
+  deliberately empty**: nothing clears that bar yet. Don't fill it just to
+  make the page look complete.
+- **Bloc de notas** (right column) — short, unpolished notes written while
+  building. Also empty for now.
+- **Notas técnicas** (right column) — technical writing and research, without
+  the evidence requirement. Lower bar than Experimentos y registros, which is
+  why it sits in the quiet column and that one doesn't.
 
-## Notebook is two levels, on purpose
+The hierarchy is the point: big and empty on the left, small and populated on
+the right. A visitor should be able to tell which one costs more to earn.
 
-`/notebook/` is an **index** (`.postlist` — id, date, title, link to the
-post). Each post lives in its own folder, `/notebook/<slug>/`, with its own
-`index.html` and its own `og-blog.png`. The index's `og-notebook.png` is
-separate — it represents "Notebook" as a whole, not any one post.
+Both right-column groups are labelled by an *italic tagline*, not a heading —
+the headings were removed on purpose so that column stops competing with the
+left one. Don't add `<h2>`s back.
+
+## One typeface for reading, one for the name
+
+Body text everywhere is Inter. The wordmark is Corinthia (script). Both come
+from Google Fonts, so there are no font files in the repo and no licences to
+review — a previous attempt used Fornire Light, which is free to *use* but
+asks not to be redistributed, and self-hosting a webfont is exactly that.
+
+`notebook/post.css`'s `--mono` is the one exception to Inter: real code blocks
+(the ASCII folder tree in the architecture post) stay on the system monospace
+stack, because aligning columns of text only works in a fixed-width font.
+
+The home and project pages (`index.html`, `yoescritor/`, `404.html`) use
+`style.css`; everything under `/notebook/` and `/signals/` uses
+`notebook/post.css` — two files because the layouts differ (the
+`.frame`/`.post` reading column, ported from regardless.cl's "memoria
+técnica" template, vs. the two-column home), not because the type does.
+
+Page background is `#F7F7F7` everywhere, set in both stylesheets.
+
+## Both blogs are two levels
+
+`/notebook/` and `/signals/` are **indexes** (`.postlist` — id, date, title,
+link). Each post lives in its own folder with its own `index.html` and its own
+`og-blog.png`. The index's own og image represents the section as a whole.
+Post ids increment per blog (001, 002, …); the two blogs number independently.
 
 ## Editing the home page
 
-Open `index.html`. The two columns are `.left` (bio, Atelier, Writing) and
-`.right` (Say hi, Personal notebook, Last updated). Each section is an
-`<h2 class="para para--heading">` followed by its content.
+Open `index.html`. The two columns are `.left` (bio, Taller, Experimentos y
+registros) and `.right` (the two link groups + Última actualización). On
+mobile (≤760px) `.right` is hidden and opens from the hamburger button at the
+top right — that's the `#menuToggle` / `#rightPanel` pair and the inline
+script at the bottom of the file.
 
-Spacing utilities on paragraphs right after a heading:
-- `.para--after-heading` — 28px, the normal gap (a heading and its list).
-- `.para--tight` / `.section-tagline` — 8px, for lines that are part of the
-  *same* visual block (heading → tagline → links, under Say hi and under
-  Personal notebook).
-- `.para--first` — resets margin-top to 0, for whatever opens `.right` (today
-  that's the "Say hi" heading, so it lines up with the bio at the top of
-  `.left`).
+Spacing utilities:
+- `.para--after-heading` — 28px, the normal gap between a heading and its
+  content.
+- `.para--tight` / `.section-tagline` — 8px, for lines in the *same* visual
+  block (tagline → links).
+- `.section-tagline--first` — margin-top 0, for whatever opens `.right` so it
+  lines up with the bio at the top of `.left`.
+- `.section-tagline--gap` — 84px, the separation between the two right-column
+  groups (it replaces the spacing the removed headings used to provide).
 
-A project is one line in `.projects` (under the Atelier heading):
+The footer sticks to the bottom of the viewport on short pages: `body` has
+`min-height:100vh` and `.all` has `flex:1 0 auto`. Don't reintroduce a
+`margin-top` on `body` — it would overflow the viewport by that amount.
+
+A project is one line in `.projects` (under the Taller heading):
 ```html
 <a class="project-name" href="/slug/">slug</a>
 ```
-Add `<span class="project-tag">Coming soon</span>` next to it if it's not
+Add `<span class="project-tag">Próximamente</span>` next to it if it's not
 live yet. The linked page is a standalone file at `/slug/index.html` — copy
 `yoescritor/index.html` as a starting point.
 
 ## Adding a post
 
-1. Make a folder: `notebook/<slug>/index.html` — copy
+Pick the right blog first: does it show evidence that something moved the
+angle? If yes it belongs in **Experimentos y registros** (home page, left
+column). If it's research or technical notes, it goes in **Notas técnicas**
+(`/notebook/`). If it's a short unpolished note, **Bloc de notas**
+(`/signals/`).
+
+1. Make a folder: `<blog>/<slug>/index.html` — copy
    `notebook/an-architecture-playbook/index.html` as a starting point, and
    give it its own `og-blog.png` (1200×630).
-2. Add it to `notebook/index.html`'s `.postlist`, at the top (newest first):
+2. Add it to that blog's `.postlist`, at the top (newest first):
 ```html
 <li>
   <p class="postlist-meta">
     <span class="post-id">002</span> &middot; <time datetime="2026-09-01">2026-09-01</time>
   </p>
-  <a class="postlist-title" href="/notebook/<slug>/">Post title</a>
+  <a class="postlist-title" href="/notebook/<slug>/">Título del post</a>
 </li>
 ```
-3. Add the same entry to `index.html`'s `.bloglist` (home page, left column,
-   under the "Writing" heading) — link straight to the post, not to
-   `/notebook/`:
+3. If the index still shows `<p class="extracts-empty">Todavía no hay nada
+   acá.</p>`, delete that line once there's a first entry.
+
+For a post that belongs in **Experimentos y registros**, also add it to
+`index.html`'s left column — the `<ul class="bloglist">` template is sitting
+in an HTML comment there, ready to uncomment:
 ```html
 <li>
-  <span class="blog-id">002</span>
+  <span class="blog-id">001</span>
   <span class="blog-date">2026-09-01</span>
-  <a href="/notebook/<slug>/">Post title</a>
+  <a href="/ruta-del-post/">Título del post</a>
 </li>
 ```
-Ids increment by one per post (001, 002, …) and appear in three places — the
-post's own `.post-meta`, the Notebook index, and the home page's Writing
-list — keep all three in sync.
+and remove the `<p class="section-tagline para--after-heading">` that says
+"Todavía no hay ninguno."
 
-Remember to update the `Last updated` line — actually, don't: `updated.js`
-sets it from the page's own `Last-Modified` header on every deploy. The text
-in the HTML is only a fallback for when JS doesn't run.
+Ids appear in two places — the post's own `.post-meta` and its blog's index —
+keep them in sync.
 
-## Adding a signal
+Don't update the `Última actualización` line by hand: `updated.js` sets it
+from the page's own `Last-Modified` header on every deploy, formatted
+`DD/MM/AAAA`. The text in the HTML is only a fallback for when JS doesn't run.
 
-Signals live in `signals/index.html`, inside `<div class="extracts">`, one
-`<div class="extract">` per entry, **newest first** (add above the others,
-not below). The CSS classes are still called `extract`/`extracts` — that's
-the page's old name from earlier iterations; internal, does
-not affect what's shown. Give each entry an `id` of its date so it can be
-linked directly (`/signals/#2026-08-20`); if two land on the same day,
-suffix the second one (`2026-08-20-2`) to keep ids unique.
+## Regenerating an og:image
 
-```html
-<div class="extract" id="2026-08-20">
-  <p class="extract-date">2026-08-20</p>
-  <blockquote class="extract-quote">
-    <p>The quoted paragraph goes here.</p>
-  </blockquote>
-  <p class="extract-source">— <a href="https://example.com" target="_blank" rel="noopener">Author, "Title"</a></p>
-  <p class="extract-note">Optional one-line thought of your own. Omit this
-  paragraph entirely if you don't have one.</p>
-</div>
-```
+They're plain 1200×630 PNGs — grey `#F7F7F7` background, black title, grey
+kicker and URL, set in Helvetica Neue via Pillow. There's no script kept in
+the repo; the ones used so far lived in a scratch directory. The layout is a
+96px margin, kicker at y=170 (24px, `#767676`), title at y=230 (58px, black),
+URL at the bottom (26px, `#767676`).
 
-If there's no source link yet, drop the `<a>` and leave plain text — don't
-guess a URL.
+## Note on `/signals/`
+
+It used to be "Signals around", a page of quoted paragraphs from other people
+(`.extract` / `.extracts` classes, still defined in `notebook/post.css`). That
+content was removed when the page became a blog; it's in git history at commit
+`cc7386e` if it's ever wanted back. The unused `.extract*` CSS is still there
+and can be deleted if that content never returns.
