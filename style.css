@@ -21,7 +21,7 @@ h1,h2,h3{ font-size:inherit; font-weight:inherit; line-height:inherit; }
   border:0;
 }
 
-html,body{ background:#fff; }
+html,body{ background:#F7F7F7; }
 
 body{
   /* 'Neue Haas Unica' goes first in case it ever gets licensed via Adobe
@@ -31,14 +31,52 @@ body{
   font-size:14px;
   line-height:20px;
   -webkit-font-smoothing:antialiased;
-  margin-top:100px;
   /* column, no longer row: .all and .site-footer stack instead of sitting
      side by side. align-items:center does the job justify-content used to
      do when .all was the only child. */
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:0 24px;
+  /* el alto del viewport es el piso de la página, y el margen de arriba pasó
+     a ser padding para que entre en ese cálculo (box-sizing:border-box).
+     Junto con el flex-grow de .all, esto deja el footer pegado abajo cuando
+     el contenido no alcanza a llenar la pantalla. */
+  min-height:100vh;
+  padding:100px 24px 0;
+}
+
+/* el nombre del sitio. Va al mismo cuerpo que la prosa a propósito: en este
+   diseño la jerarquía la hace el espacio en blanco, no el tamaño. Queda
+   solo, arriba de todo y alineado con la columna izquierda, para que se lea
+   como el nombre del lugar y no como una sección más. */
+.site-title{
+  width:100%;
+  max-width:1106px;
+  /* Corinthia es script: las letras se enlazan, así que nada de tracking
+     negativo, y la interlínea sube para dar aire a los trazos altos. */
+  font-family:'Corinthia',cursive;
+  font-weight:400;
+  font-size:clamp(2rem,12.5vw,160px);
+  line-height:1.15;
+  letter-spacing:0;
+  color:#FA2742;
+  /* el aire de abajo lo pone .site-status, que va pegado al título */
+  margin-bottom:16px;
+}
+
+/* estado del sitio, justo bajo el nombre. Mismo lenguaje que .project-tag
+   (mono, mayúsculas, gris claro): en este sitio los rótulos de estado se
+   ven así, y el mono hace de contrapunto técnico a la script del título. */
+.site-status{
+  width:100%;
+  max-width:1106px;
+  font-family:ui-monospace,'SF Mono',Menlo,monospace;
+  font-size:13px;
+  line-height:18px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#999;
+  margin-bottom:60px;
 }
 
 .all{
@@ -46,6 +84,9 @@ body{
   width:100%;
   max-width:1106px;
   gap:52px;
+  /* crece para ocupar el espacio sobrante y empujar el footer al fondo, sin
+     perder los 96px de margen que el footer ya trae */
+  flex:1 0 auto;
 }
 
 /* left: bio + projects (wide) */
@@ -89,6 +130,12 @@ body{
   letter-spacing:-.1px;
   color:#767676;
 }
+/* la bajada ahora abre cada bloque de la columna derecha, así que carga el
+   espaciado que antes ponía el heading: 0 arriba para alinear con la bio... */
+.section-tagline--first{ margin-top:0; }
+/* ...y 84px para separar el segundo bloque del primero, el mismo aire que
+   dejaba .para--heading entre secciones. */
+.section-tagline--gap{ margin-top:84px; }
 
 /* "Last updated" es la línea menos importante de la página: la más chica
    de todas, en cursiva, para que no compita ni con el nav ni con la nota */
@@ -366,7 +413,9 @@ body{
   z-index:60;
   width:36px;
   height:36px;
-  background:#fff;
+  /* del color del papel, no blanco: tapa el texto que scrollea por debajo
+     sin dibujar un cuadrado más claro que la página */
+  background:#F7F7F7;
   border:0;
   padding:0;
   cursor:pointer;
@@ -386,7 +435,10 @@ body{
 .menu-toggle:focus-visible{ outline:1px solid #000; outline-offset:4px; }
 
 @media (max-width:760px){
-  body{ margin-top:56px; padding:0 24px; }
+  body{ padding:56px 24px 0; }
+  /* el título comparte línea visual con el botón de hamburguesa, que es
+     fijo arriba a la derecha: menos aire abajo para que no queden separados */
+  .site-status{ margin-bottom:40px; }
   .all{ flex-direction:column; gap:40px; }
   .left, .right{ max-width:100%; flex:none; padding-right:0; margin-top:0; }
   /* el cuerpo del proyecto acompaña a la portada también acá */

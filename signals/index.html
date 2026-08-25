@@ -1,20 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Signals around — Rafa Sacaan</title>
-<meta name="description" content="Parts and pieces found on the web that carry a koanic energy for the things I want to build.">
-<meta property="og:title" content="Signals around">
-<meta property="og:description" content="Parts and pieces found on the web that carry a koanic energy for the things I want to build.">
-<meta property="og:type" content="article">
+<title>Bloc de notas — le bateleur</title>
+<meta name="description" content="Notas cortas y sin pulir — lo que voy anotando mientras construyo.">
+<meta property="og:title" content="Bloc de notas — le bateleur">
+<meta property="og:description" content="Notas cortas y sin pulir — lo que voy anotando mientras construyo.">
+<meta property="og:type" content="website">
 <meta property="og:url" content="https://lebateleur.cl/signals/">
 <meta property="og:image" content="https://lebateleur.cl/signals/og-signals.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Signals around">
-<meta name="twitter:description" content="Parts and pieces found on the web that carry a koanic energy for the things I want to build.">
+<meta name="twitter:title" content="Bloc de notas — le bateleur">
+<meta name="twitter:description" content="Notas cortas y sin pulir — lo que voy anotando mientras construyo.">
 <meta name="twitter:image" content="https://lebateleur.cl/signals/og-signals.png">
 <link rel="canonical" href="https://lebateleur.cl/signals/">
 
@@ -22,9 +22,9 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-<!-- Misma Inter que el resto del sitio. Signals y Notebook son las dos
-     páginas de "contenido escrito" del sitio, así que comparten identidad y
-     el mismo archivo de estilos (/notebook/post.css) en vez de duplicarlo. -->
+<!-- Misma Inter que el resto del sitio. Bloc de notas y Notas técnicas son
+     los dos blogs del sitio, así que comparten identidad y el mismo archivo
+     de estilos (/notebook/post.css) en vez de duplicarlo. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
@@ -34,49 +34,28 @@
 <body>
 
 <div class="frame">
-  <a class="volver" href="/"><span class="chev">&lsaquo;</span> Home</a>
+  <a class="volver" href="/"><span class="chev">&lsaquo;</span> Inicio</a>
 
   <article class="post">
-    <p class="post-meta">signals</p>
-    <h1 class="post-title">Signals around</h1>
+    <p class="post-meta">bloc de notas</p>
+    <h1 class="post-title">Bloc de notas</h1>
     <p class="extracts-lede">
-      Parts &amp; pieces found on the web that carry a <em>koanic</em> energy
-      for the things I want to build. Newest first.
+      Notas cortas y sin pulir &mdash; lo que voy anotando mientras construyo.
+      Más nuevo primero.
     </p>
 
-    <!-- Cada signal nuevo va ACÁ ARRIBA (más nuevo primero), como
-         <div class="extract" id="AAAA-MM-DD">...</div>. Ver README.md para
-         la plantilla exacta. (Las clases CSS se llaman "extract" por
-         herencia del nombre anterior de la página — es detalle interno,
-         no afecta lo que se ve.) -->
-    <div class="extracts">
-      <div class="extract" id="2026-08-17-3">
-        <p class="extract-date">2026-08-17</p>
-        <blockquote class="extract-quote">
-          <p>The more you plan in order to avoid failure, the more you end up
-          failing.</p>
-        </blockquote>
-        <p class="extract-source">&mdash; Soda Kazuhiro, <em>Why I Make Documentaries</em></p>
-      </div>
-      <div class="extract" id="2026-08-17-2">
-        <p class="extract-date">2026-08-17</p>
-        <blockquote class="extract-quote">
-          <p>You can start a deep research task, step away to sew fabric, then
-          return and continue the work through voice. The AI keeps working
-          while she focuses on the physical parts of her business.</p>
-        </blockquote>
-        <p class="extract-source">&mdash; Fashion-brand solo founder</p>
-      </div>
-      <div class="extract" id="2026-08-17">
-        <p class="extract-date">2026-08-17</p>
-        <blockquote class="extract-quote">
-          <p>Don't let anyone rob you of your imagination, your creativity, or
-          your curiosity. It's your place in the world; it's your life. Go and
-          do all you can with it, and make it the life you want to live.</p>
-        </blockquote>
-        <p class="extract-source">&mdash; Anne-Laure Le Cunff, <em>Tiny Experiments</em></p>
-      </div>
-    </div>
+    <!-- Mismo formato que /notebook/ (Notas técnicas): un <li> por post, más
+         nuevo primero, y cada post vive en su propia carpeta
+         /signals/<slug>/index.html con su propio og:image. La numeración de
+         ids es independiente de la de Notas técnicas — cada blog lleva la
+         suya. Ver README.md para la plantilla.
+
+         Antes esta página mostraba citas ajenas ("Signals around"); esas
+         quedaron en el historial de git si alguna vez hacen falta. -->
+    <ul class="postlist">
+    </ul>
+
+    <p class="extracts-empty">Todavía no hay nada acá.</p>
   </article>
 </div>
 

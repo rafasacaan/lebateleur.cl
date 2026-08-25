@@ -23,7 +23,7 @@
 }
 *{ box-sizing:border-box; margin:0; padding:0; }
 html,body{ min-height:100%; }
-body{ font-family:var(--sans); color:var(--ink); background:#fff; -webkit-font-smoothing:antialiased; }
+body{ font-family:var(--sans); color:var(--ink); background:#F7F7F7; -webkit-font-smoothing:antialiased; }
 
 .frame{
   min-height:100vh; min-height:100dvh;
