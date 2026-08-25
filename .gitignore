@@ -1,1 +1,5 @@
 .DS_Store
+# El ícono de carpeta personalizado de macOS. El archivo se llama "Icon" con
+# un retorno de carro al final; el "?" lo matchea, porque escribir el \r acá
+# no sirve — git lo trata como fin de línea y lo descarta.
+Icon?
