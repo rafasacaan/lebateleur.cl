@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>le bateleur | mini-taller de pequeños ajustes</title>
-<meta name="description" content="le bateleur es un mini-taller que introduce pequeños ajustes en cómo escribimos, leemos, creamos o navegamos la web, para que lo que encontremos sea más único y lo que dejemos en ella, más nuestro.">
-<meta property="og:title" content="le bateleur | mini-taller de pequeños ajustes">
-<meta property="og:description" content="le bateleur es un mini-taller que introduce pequeños ajustes en cómo escribimos, leemos, creamos o navegamos la web, para que lo que encontremos sea más único y lo que dejemos en ella, más nuestro.">
+<title>le bateleur — un cuaderno abierto</title>
+<meta name="description" content="Un cuaderno abierto. Un comienzo. Alguien que tiene la destreza pero que aún no se la ha demostrado al resto — o posiblemente un charlatán.">
+<meta property="og:title" content="le bateleur — un cuaderno abierto">
+<meta property="og:description" content="Un cuaderno abierto. Un comienzo. Alguien que tiene la destreza pero que aún no se la ha demostrado al resto — o posiblemente un charlatán.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lebateleur.cl/">
 <meta property="og:image" content="https://lebateleur.cl/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="le bateleur — un mini-taller de pequeños ajustes en cómo escribimos, leemos, creamos y navegamos la web.">
+<meta property="og:image:alt" content="le bateleur — el arcano I: el que tiene los instrumentos sobre la mesa y todavía no demostró nada.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="le bateleur | mini-taller de pequeños ajustes">
-<meta name="twitter:description" content="le bateleur es un mini-taller que introduce pequeños ajustes en cómo escribimos, leemos, creamos o navegamos la web, para que lo que encontremos sea más único y lo que dejemos en ella, más nuestro.">
+<meta name="twitter:title" content="le bateleur — un cuaderno abierto">
+<meta name="twitter:description" content="Un cuaderno abierto. Un comienzo. Alguien que tiene la destreza pero que aún no se la ha demostrado al resto — o posiblemente un charlatán.">
 <meta name="twitter:image" content="https://lebateleur.cl/og.png">
 <link rel="canonical" href="https://lebateleur.cl/">
 
@@ -23,12 +23,12 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-<!-- Dos familias: Inter para todo el cuerpo y Corinthia (script) solo para el
-     nombre del sitio. Ambas de Google Fonts, así que no hay archivos de
-     fuente en el repo ni licencias que revisar. -->
+<!-- Dos familias, las dos de Google Fonts con licencia abierta: Mansalva
+     rotula (nombre, secciones, títulos de nota) y Literata sostiene la prosa.
+     Van en un solo pedido. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;1,14..32,400&family=Corinthia&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
 
 <link rel="stylesheet" href="/style.css">
 </head>
@@ -37,84 +37,42 @@
 <!-- El nombre del sitio, ahora sí visible: es el h1 de la página y el único
      rótulo en minúscula que no es una sección. -->
 <h1 class="site-title">le bateleur</h1>
-<p class="site-status">En construcción</p>
-
-<!-- Solo visible en mobile (ver @media en style.css): abre/cierra .right
-     como panel flotante en vez de dejarlo siempre debajo de la bio. -->
-<button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="rightPanel" aria-label="Abrir menú">
-  <span class="menu-toggle-bar"></span>
-  <span class="menu-toggle-bar"></span>
-  <span class="menu-toggle-bar"></span>
-</button>
 
 <div class="all">
 
   <div class="left">
+    <!-- El sitio dicho a través de la carta: el arcano I es el que tiene los
+         instrumentos sobre la mesa y todavía no probó nada. Es todo lo que
+         hay en la portada, además del nombre. -->
     <p class="para">
-      hola, soy rafa, escritor en le bateleur.
+      le bateleur es un cuaderno abierto, es un comienzo, es aquel que tiene
+      la destreza pero que aún no se la ha demostrado al resto.
       <br><br>
-      le bateleur es un mini-taller que introduce pequeños ajustes en cómo
-      escribimos, leemos, creamos o navegamos la web, para que lo que
-      encontremos sea más único y lo que dejemos en ella, más nuestro.
+      le bateleur también es un artista, o posiblemente un charlatán. o es
+      alguien que podría sorprenderse a sí mismo de lo que es capaz de hacer.
     </p>
 
-    <h2 class="para para--heading">Taller</h2>
+    <!-- Rótulo de sección. Va en la mano y en mayúscula para que se lea como
+         rótulo y no como más prosa. -->
+    <h2 class="section-title">Notas</h2>
 
-    <!-- Cada proyecto es una página propia: URL real, su propio og:image y su
-         propia entrada en buscadores. Se llama "Taller" y no "Proyectos"
-         porque no son piezas de portfolio terminadas: son hipótesis de
-         producto en construcción, puestas a prueba en público. -->
-    <div class="projects">
-      <div class="project-row">
-        <a class="project-name" href="/yoescritor/">yoescritor</a>
-        <span class="project-tag">Próximamente</span>
-      </div>
-      <div class="project-row">
-        <span class="project-name">munra</span>
-        <span class="project-tag">Próximamente</span>
-      </div>
-    </div>
+    <!-- El índice de notas, de la más nueva a la más vieja. Cada una es
+         título, fecha y una línea de qué hay adentro. El link vive dentro
+         del h3 y hereda su tipo y tamaño: el título ES el link. La fecha va
+         en <time> con datetime en ISO, que es lo que leen los buscadores.
+         La etiqueta "dummy" marca que el texto es de relleno, no definitivo:
+         se saca borrando el <span>. -->
+    <article class="note">
+      <h3 class="note-title"><a href="/notas/el-temblor-no-es-una-fuente/">El temblor no es una fuente</a></h3>
+      <p class="note-date"><time datetime="2026-08-31">31 de agosto, 2026</time> <span class="note-tag">dummy</span></p>
+      <p class="note-desc">Perseguí una letra ajena y descubrí que no era tipografía.</p>
+    </article>
 
-    <h2 class="para para--heading">Experimentos y registros</h2>
-
-    <!-- El output importante del sitio: ideas puestas a prueba, con evidencia
-         de si movieron el ángulo o no. La vara es más alta que la de "Notas
-         técnicas" (columna derecha), que es research sin comprobar — por eso
-         esta sección vive acá, grande, y aquella allá, discreta.
-
-         Vacía a propósito: todavía no hay ninguna nota que cumpla la vara.
-         Cuando haya, va un <li> por post, más nuevo primero:
-
-         <li>
-           <span class="blog-id">001</span>
-           <span class="blog-date">2026-09-01</span>
-           <a href="/ruta-del-post/">Título del post</a>
-         </li>
-    -->
-    <p class="section-tagline para--after-heading"><em>Todavía no hay ninguno.</em></p>
-  </div>
-
-  <div class="right" id="rightPanel">
-    <!-- Sin rótulo arriba: la bajada en cursiva hace de título. Los bloques
-         de esta columna son listas cortas de links y se explican solos, así
-         que el heading sobraba. El contacto va último, después del material
-         propio. -->
-    <p class="section-tagline section-tagline--first"><em>Piezas sueltas, sin pulir</em></p>
-    <p class="para para--tight">
-      <a href="/signals/">Bloc de notas</a><br>
-      <a href="/notebook/">Notas técnicas</a>
-    </p>
-
-    <p class="section-tagline section-tagline--gap"><em>Encuéntrame aquí, o escribe</em></p>
-    <p class="para para--tight">
-      <a href="mailto:rafasacaan@gmail.com?subject=Hey%20Rafa%2C">rafasacaan@gmail.com</a><br>
-      <a href="https://www.linkedin.com/in/rafaelsacaanamunategui/" target="_blank" rel="noopener me">linkedin</a><br>
-      <a href="https://github.com/rafasacaan" target="_blank" rel="noopener me">github</a>
-    </p>
-
-    <p class="updated-line para--after-heading">
-      <em>Última actualización: <span id="updated">09/08/2026</span></em>
-    </p>
+    <article class="note">
+      <h3 class="note-title"><a href="/notas/un-complice-no-un-reemplazo/">Un cómplice, no un reemplazo</a></h3>
+      <p class="note-date"><time datetime="2026-08-24">24 de agosto, 2026</time> <span class="note-tag">dummy</span></p>
+      <p class="note-desc">Escribo en cuadernos que nunca releo. Empecé por ahí.</p>
+    </article>
   </div>
 
 </div>
@@ -122,45 +80,6 @@
 <footer class="site-footer">
   <p>&copy; 2026 le bateleur &middot; santiago, chile</p>
 </footer>
-
-<script src="/updated.js"></script>
-<script>
-(function () {
-  var btn = document.getElementById('menuToggle');
-  var panel = document.getElementById('rightPanel');
-  if (!btn || !panel) return;
-
-  function close() {
-    btn.setAttribute('aria-expanded', 'false');
-    panel.classList.remove('menu-open');
-  }
-  function open() {
-    btn.setAttribute('aria-expanded', 'true');
-    panel.classList.add('menu-open');
-  }
-
-  btn.addEventListener('click', function () {
-    var isOpen = btn.getAttribute('aria-expanded') === 'true';
-    if (isOpen) { close(); } else { open(); }
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') close();
-  });
-
-  document.addEventListener('click', function (e) {
-    if (btn.getAttribute('aria-expanded') !== 'true') return;
-    if (panel.contains(e.target) || btn.contains(e.target)) return;
-    close();
-  });
-
-  /* si la ventana crece más allá del breakpoint con el menú abierto, no
-     quede atrapado en el estado "abierto" cuando .right vuelve a la columna */
-  window.addEventListener('resize', function () {
-    if (window.innerWidth > 760) close();
-  });
-})();
-</script>
 
 </body>
 </html>

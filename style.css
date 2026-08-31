@@ -1,8 +1,29 @@
-/* Layout and type traced from earvin.ca: white background, two columns
-   floating below a 100px top margin, 22px/28px black text, grey links with no
-   underline. Unlike the original, both columns are top-aligned, and the grey
-   is #767676 rather than earvin's #999 — 4.54:1 on white, so it clears WCAG AA
-   while still reading as the same quiet grey. */
+/* la pila completa, en una variable para no repetirla en cada regla */
+:root{
+  --hand:'Gloria Hallelujah','Bradley Hand','Segoe Print',cursive;
+  /* la de leer: Gloria Hallelujah rotula, Literata sostiene el texto largo */
+  --lectura:Literata,Charter,Georgia,'Times New Roman',serif;
+  /* la medida de lectura, una sola vez: son los 33em de la prosa a 21px.
+     Va en px a propósito — en em cada bloque la resolvería contra su propio
+     cuerpo y la columna dejaría de estar alineada. */
+  --medida:693px;
+  --papel:#FFFFFF;
+  --tinta:#141414;
+  /* 5.68:1 sobre el blanco, cómodo por encima del 4.5 que pide WCAG AA. Tira
+     apenas a frío, del lado azulado en que estaba el fondo anterior. */
+  --gris:#666670;
+  /* las dos líneas del sitio: la que separa bloques y la que apenas insinúa
+     una fila. Van acá para que un cambio de papel no obligue a cazar hex
+     sueltos por el archivo. */
+  --linea:#E2E2E7;
+  --linea-suave:#F0F0F3;
+}
+
+/* La grilla viene de earvin.ca: dos columnas top-aligned bajo un margen
+   superior de 100px, links grises sin subrayado. Lo que cambió es el tono:
+   fondo blanco, tinta casi negra, y dos letras nada más: Gloria Hallelujah rotula
+   (nombre, secciones, bajadas) y Literata sostiene la prosa. No hay sans ni
+   mono. */
 
 *{ box-sizing:border-box; margin:0; padding:0; }
 
@@ -11,25 +32,14 @@
 h1,h2,h3{ font-size:inherit; font-weight:inherit; line-height:inherit; }
 
 /* fuera de pantalla pero presente para lectores de pantalla y buscadores */
-.vh{
-  position:absolute;
-  width:1px; height:1px;
-  margin:-1px; padding:0;
-  overflow:hidden;
-  clip-path:inset(50%);
-  white-space:nowrap;
-  border:0;
-}
 
-html,body{ background:#F7F7F7; }
+html,body{ background:var(--papel); }
 
 body{
-  /* 'Neue Haas Unica' goes first in case it ever gets licensed via Adobe
-     Fonts; what actually renders today is Inter, the closest free stand-in. */
-  font-family:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
-  color:#333;
-  font-size:14px;
-  line-height:20px;
+  font-family:var(--hand);
+  color:var(--tinta);
+  font-size:15px;
+  line-height:24px;
   -webkit-font-smoothing:antialiased;
   /* column, no longer row: .all and .site-footer stack instead of sitting
      side by side. align-items:center does the job justify-content used to
@@ -52,32 +62,22 @@ body{
 .site-title{
   width:100%;
   max-width:1106px;
-  /* Corinthia es script: las letras se enlazan, así que nada de tracking
-     negativo, y la interlínea sube para dar aire a los trazos altos. */
-  font-family:'Corinthia',cursive;
+  /* misma letra que el resto de la página: acá el nombre no se distingue por
+     tipo sino por tamaño y por el aire que tiene alrededor. */
+  font-family:var(--hand);
   font-weight:400;
-  font-size:clamp(2rem,12.5vw,160px);
-  line-height:1.15;
+  font-size:clamp(2.2rem,11vw,140px);
+  line-height:1.05;
   letter-spacing:0;
-  color:#FA2742;
-  /* el aire de abajo lo pone .site-status, que va pegado al título */
-  margin-bottom:16px;
+  color:var(--tinta);
+  /* el único aire entre el nombre y el contenido: sin esto el título se pega
+     al primer párrafo y deja de leerse como cabecera */
+  margin-bottom:120px;
 }
 
-/* estado del sitio, justo bajo el nombre. Mismo lenguaje que .project-tag
-   (mono, mayúsculas, gris claro): en este sitio los rótulos de estado se
-   ven así, y el mono hace de contrapunto técnico a la script del título. */
-.site-status{
-  width:100%;
-  max-width:1106px;
-  font-family:ui-monospace,'SF Mono',Menlo,monospace;
-  font-size:13px;
-  line-height:18px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:#999;
-  margin-bottom:60px;
-}
+/* una sola columna desde que se fue .right: .left es el ancho completo y
+   .all existe solo para el flex:1 0 auto que empuja el footer al fondo */
+.left{ width:100%; }
 
 .all{
   display:flex;
@@ -89,71 +89,206 @@ body{
   flex:1 0 auto;
 }
 
-/* left: bio + projects (wide) */
-.left{
-  max-width:55%;
-  flex:1 1 55%;
-  padding-right:16px;
-}
-
-/* right: contact (narrow, top-aligned with the bio) */
-.right{
-  max-width:30%;
-  flex:1 1 30%;
-}
-
 /* the paragraph is the unit of everything, same as earvin: links live inside
    the flow of the text, separated only by <br> */
 .para{
   display:block;
-  font-size:22px;
-  line-height:28px;
-  letter-spacing:-.2px;
+  /* 21px / 1.58 son las medidas de Medium, y el max-width es lo que las hace
+     servir: sin él la línea se estira a los 1106px de la columna y pasa de
+     ~66 a ~110 caracteres, que es donde el ojo pierde el renglón al volver. */
+  font-family:var(--lectura);
+  font-size:21px;
+  line-height:1.58;
+  letter-spacing:0;
   font-weight:400;
-  color:#000;
-  max-width:100%;
+  color:var(--tinta);
+  max-width:var(--medida);
 }
 
-/* la columna de contacto/nav lee un escalón más chica que la bio: es
-   navegación, no prosa a desarrollar, no necesita el mismo peso */
-.right .para{ font-size:18px; line-height:25px; }
-
-/* bajada de un heading (Say hi, Personal notebook): pegada arriba
-   (margin-top:8px, ver .para--tight), en cursiva y muda para leerse como
-   subtítulo, no como link */
-.section-tagline{
-  margin-top:8px;
-  font-family:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
-  font-style:italic;
-  font-size:15px;
-  line-height:21px;
-  letter-spacing:-.1px;
-  color:#767676;
-}
-/* la bajada ahora abre cada bloque de la columna derecha, así que carga el
-   espaciado que antes ponía el heading: 0 arriba para alinear con la bio... */
-.section-tagline--first{ margin-top:0; }
-/* ...y 84px para separar el segundo bloque del primero, el mismo aire que
-   dejaba .para--heading entre secciones. */
-.section-tagline--gap{ margin-top:84px; }
-
-/* "Last updated" es la línea menos importante de la página: la más chica
-   de todas, en cursiva, para que no compita ni con el nav ni con la nota */
-.updated-line{
-  font-family:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
-  font-style:italic;
-  font-size:14px;
-  line-height:20px;
-  letter-spacing:-.1px;
-  color:#767676;
+/* rótulo de sección: la manuscrita marca los rótulos, Literata sostiene la
+   prosa. La mayúscula y el tracking hacen el resto: no hay cambio de peso ni
+   de color, solo de letra. */
+.section-title{
+  font-family:var(--hand);
+  font-size:52px;
+  line-height:1.15;
+  font-weight:400;
+  text-transform:uppercase;
+  color:var(--tinta);
+  margin-top:84px;
+  /* Gloria Hallelujah publica un solo peso, así que un rótulo más liviano no
+     se puede pedir con font-weight. Esto es lo más cercano: un contorno del
+     color del papel pintado ENCIMA del relleno, que se come el borde del
+     glifo y lo adelgaza de verdad. Sale de --papel y no de un #fff fijo para
+     que siga funcionando si el fondo cambia. Si el navegador no soporta
+     text-stroke, el rótulo vuelve al trazo original y no se rompe nada. */
+  -webkit-text-stroke:1.35px var(--papel);
+  letter-spacing:-.06em;
 }
 
-.para a{
-  color:#767676;
+/* una nota del índice. */
+.note{
+  max-width:var(--medida);
+  margin-top:40px;
+}
+/* entre dos notas hace falta más aire que entre el rótulo y la primera:
+   si no, la descripción de una y el título de la siguiente se leen juntos */
+.note + .note{ margin-top:52px; }
+/* el título en la mano, afinado y apretado. font-weight:400 obligatorio:
+   Gloria Hallelujah solo publica ese peso, y cualquier valor mayor le pinta
+   una negrita sintética que le arruina el trazo. */
+.note-title{
+  font-family:var(--hand);
+  font-size:31px;
+  line-height:1.25;
+  font-weight:400;
+  color:var(--tinta);
+  /* Gloria Hallelujah publica un solo peso, así que un rótulo más liviano no
+     se puede pedir con font-weight. Esto es lo más cercano: un contorno del
+     color del papel pintado ENCIMA del relleno, que se come el borde del
+     glifo y lo adelgaza de verdad. Sale de --papel y no de un #fff fijo para
+     que siga funcionando si el fondo cambia. Si el navegador no soporta
+     text-stroke, el rótulo vuelve al trazo original y no se rompe nada. */
+  -webkit-text-stroke:1.35px var(--papel);
+  letter-spacing:-.06em;
+}
+/* el link hereda todo del h3: el título ES el link, así que no cambia de
+   color ni se subraya en reposo. El hover lo marca con el gris, igual que
+   el resto de los links del sitio pero al revés — acá el reposo es negro. */
+.note-title a{
+  color:inherit;
   text-decoration:none;
   transition:color .2s;
 }
-.para a:hover{ color:#000; }
+.note-title a:hover{ color:var(--gris); }
+.note-title a:focus-visible{ outline:1px solid var(--tinta); outline-offset:4px; }
+
+/* marca de contenido de relleno. Va junto a la fecha y no en el título para
+   que no compita con el link; el recuadro la separa del dato real. */
+.note-tag{
+  display:inline-block;
+  font-family:var(--lectura);
+  font-size:11px;
+  line-height:1;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gris);
+  border:1px solid var(--linea);
+  border-radius:2px;
+  padding:3px 6px 2px;
+  margin-left:6px;
+  vertical-align:1px;
+}
+
+.note-date{
+  font-family:var(--lectura);
+  font-size:15px;
+  line-height:1.5;
+  color:var(--gris);
+  margin-top:6px;
+}
+.note-desc{
+  font-family:var(--lectura);
+  font-size:19px;
+  line-height:1.5;
+  color:var(--gris);
+  margin-top:10px;
+}
+
+/* ---- la página de una nota ---- */
+
+/* el contenedor toma el mismo ancho que .all en la portada, para que la nota
+   arranque en el mismo eje izquierdo y no quede centrada; la medida de
+   lectura la ponen los hijos. */
+.nota{
+  width:100%;
+  max-width:1106px;
+  /* crece para empujar el footer al fondo cuando la nota es corta, igual que
+     hace .all en la portada */
+  flex:1 0 auto;
+  /* el aire entre el final del texto y la línea del footer: son estos 40px
+     más los 96px de margen que el footer ya trae */
+  padding-bottom:40px;
+}
+.nota-title,
+.nota-date,
+.nota-body{ max-width:var(--medida); }
+
+/* volver, arriba de todo. Va chico y gris: es salida, no destino. */
+.nota-back{
+  display:inline-block;
+  font-family:var(--lectura);
+  font-size:15px;
+  color:var(--gris);
+  text-decoration:none;
+  transition:color .2s;
+  margin-bottom:64px;
+}
+.nota-back:hover{ color:var(--tinta); }
+.nota-back:focus-visible{ outline:1px solid var(--tinta); outline-offset:4px; }
+
+/* el título de la nota, en la mano y sin negrita sintética — Gloria
+   Hallelujah solo publica el peso 400. Más chico que el nombre del sitio: acá la cabeza es la nota,
+   pero el sitio sigue siendo el lugar. */
+.nota-title{
+  font-family:var(--hand);
+  font-size:clamp(2rem,6vw,58px);
+  line-height:1.1;
+  font-weight:400;
+  color:var(--tinta);
+  text-wrap:balance;
+}
+.nota-date{
+  font-family:var(--lectura);
+  font-size:15px;
+  line-height:1.5;
+  color:var(--gris);
+  margin-top:14px;
+  margin-bottom:56px;
+}
+
+/* el cuerpo de la nota: las mismas medidas de la prosa de la portada */
+.nota-body p{
+  font-family:var(--lectura);
+  font-size:21px;
+  line-height:1.58;
+  color:var(--tinta);
+}
+.nota-body p + p{ margin-top:1.4em; }
+
+/* subtítulo dentro de la nota: la mano otra vez, como los rótulos */
+.nota-body h2{
+  font-family:var(--hand);
+  font-size:31px;
+  line-height:1.25;
+  font-weight:400;
+  color:var(--tinta);
+  margin-top:64px;
+  margin-bottom:16px;
+}
+
+/* una cita o un aparte: sangrado y en gris, sin comillas decorativas */
+.nota-body blockquote{
+  margin-top:1.4em;
+  padding-left:24px;
+  border-left:2px solid var(--linea);
+}
+.nota-body blockquote p{ color:var(--gris); }
+
+.nota-body a{
+  color:var(--gris);
+  text-decoration:none;
+  border-bottom:1px solid var(--linea);
+  transition:color .2s, border-color .2s;
+}
+.nota-body a:hover{ color:var(--tinta); border-bottom-color:var(--tinta); }
+
+.para a{
+  color:var(--gris);
+  text-decoration:none;
+  transition:color .2s;
+}
+.para a:hover{ color:var(--tinta); }
 
 .para em{ font-style:italic; }
 /* el 700 viene pedido en el <link> de Inter, así no hay bold sintético */
@@ -163,91 +298,14 @@ body{
    no hace falta bold para anunciar la sección. Mayúscula para que "Atelier",
    "Blog" y cualquier título de sección que se agregue después se lean como
    rótulos, no como más prosa — a diferencia de los nombres propios de abajo
-   (yoescritor, los títulos de los posts), que se quedan en minúscula. */
-.para--heading{ margin-top:84px; font-weight:400; text-transform:uppercase; letter-spacing:.04em; }
-.para--heading + .para--heading{ margin-top:56px; }
-/* "Say hi" es el primer elemento de .right — sin este reset, heredaría el
-   margen pensado para separarse de un párrafo anterior y quedaría
-   desalineado con el arranque de la bio en .left */
-.para--first{ margin-top:0; }
-/* espaciador genérico de 28px — el mismo aire que .projects/.bloglist dejan
-   bajo su heading. Sirve tanto para el párrafo que sigue a un heading como
-   para separar bloques sueltos dentro de la misma columna (ej. "Last
-   updated" después de los links de Personal notebook). */
-.para--after-heading{ margin-top:28px; }
+   (los títulos de las notas), que se quedan en minúscula. */
+
 /* espaciador chico (8px, casi solo el line-height) — para cuando dos líneas
    son parte del mismo bloque visual y no de secciones distintas, como el
    heading/tagline/links de "Personal notebook", que deben leerse pegados
    entre sí en vez de separados como Atelier y Blog lo están. */
-.para--tight{ margin-top:8px; }
-
-/* ---- proyectos desplegables ---- */
-
-/* el índice de proyectos */
-.projects{
-  margin-top:28px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-}
-
-/* fila de un proyecto: el nombre + un tag opcional de estado, en la misma
-   línea. Cuando no hay tag, project-row es solo el link. */
-.project-row{
-  display:flex;
-  align-items:baseline;
-  gap:.7em;
-}
-
-/* negro: los proyectos son lo único de la portada que lleva a otra parte,
-   así que pesan más que el resto del texto */
-.project-name{
-  display:inline-block;
-  font-size:22px;
-  line-height:30px;
-  letter-spacing:-.2px;
-  color:#000;
-  text-decoration:none;
-  transition:color .2s;
-}
-.project-name:hover{ color:#767676; }
-.project-name:focus-visible{ outline:1px solid #000; outline-offset:4px; }
-
-/* tag de estado junto al nombre: mudo y chico, no compite con el link */
-.project-tag{
-  font-family:ui-monospace,'SF Mono',Menlo,monospace;
-  font-size:13px;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  color:#999;
-}
 
 /* ---- lista del blog ---- */
-.bloglist{
-  list-style:none;
-  margin-top:28px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-.bloglist li{
-  font-size:22px;
-  line-height:28px;
-  letter-spacing:-.2px;
-}
-/* el id y la fecha son dato, no prosa: monoespaciados y mudos para no
-   competir con el título, que es lo único clickeable de la línea */
-.blog-id,
-.blog-date{
-  font-family:ui-monospace,'SF Mono',Menlo,monospace;
-  font-size:15px;
-  letter-spacing:0;
-  color:#999;
-  margin-right:.6em;
-}
-.bloglist a{ color:#000; text-decoration:none; border-bottom:1px solid transparent; transition:color .2s, border-color .2s; }
-.bloglist a:hover{ color:#767676; border-bottom-color:#767676; }
-.bloglist a:focus-visible{ outline:1px solid #000; outline-offset:4px; }
 
 /* ---- página de proyecto ----
    comparte el ancho máximo de la portada para que las dos se alineen */
@@ -263,129 +321,39 @@ body{
   padding-bottom:44px;
 }
 .bar-home{
-  font-size:22px;
-  line-height:28px;
-  letter-spacing:-.2px;
+  font-size:35px;
+  line-height:52px;
+  letter-spacing:0;
   text-transform:uppercase;
-  color:#767676;
+  color:var(--gris);
   text-decoration:none;
   transition:color .2s;
 }
-.bar-home:hover{ color:#000; }
+.bar-home:hover{ color:var(--tinta); }
 .bar-name{
-  font-size:22px;
-  line-height:28px;
-  letter-spacing:-.2px;
+  font-size:35px;
+  line-height:52px;
+  letter-spacing:0;
   text-transform:uppercase;
-  color:#000;
+  color:var(--tinta);
   margin-left:auto;
 }
-.bar-close{
-  font-size:26px;
-  line-height:28px;
-  color:#767676;
-  text-decoration:none;
-  transition:color .2s;
-}
-.bar-close:hover{ color:#000; }
+
 .bar-home:focus-visible,
-.bar-close:focus-visible{ outline:1px solid #000; outline-offset:4px; }
 
 /* el cuerpo del proyecto lee al mismo tamaño que la portada (22px/28px):
    ya no es un panel anidado bajo la bio, es su propia página */
 .project-body{ max-width:38em; }
 
-.panel-spec{
-  font-size:17px;
-  margin-top:0;
-  line-height:25px;
-  letter-spacing:.02em;
-  color:#767676;
-  margin-bottom:40px;
-}
-
-/* rótulo de sección: el que corta el bloque en partes escaneables */
-.panel-label{
-  font-size:13px;
-  line-height:18px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:#767676;
-  margin-bottom:16px;
-}
-.panel-label:not(:first-of-type){ margin-top:52px; }
-
 .panel-text{
-  font-size:22px;
-  line-height:28px;
-  letter-spacing:-.2px;
-  color:#000;
+  font-size:35px;
+  line-height:52px;
+  letter-spacing:0;
+  color:var(--tinta);
 }
 .panel-text + .panel-text{ margin-top:20px; }
-.panel-text a{ color:#767676; text-decoration:none; transition:color .2s; }
-.panel-text a:hover{ color:#000; }
-
-/* los posts numerados: la serie tiene orden, y el número lo hace evidente
-   sin tener que repetir "hey-frank #N" en cada título */
-.panel-list{
-  list-style:none;
-  counter-reset:post;
-  font-size:22px;
-  line-height:28px;
-  letter-spacing:-.2px;
-}
-.panel-list li{
-  counter-increment:post;
-  display:flex;
-  gap:16px;
-  padding:10px 0;
-  border-bottom:1px solid #f2f2f2;
-}
-.panel-list li:first-child{ border-top:1px solid #f2f2f2; }
-.panel-list li::before{
-  content:counter(post);
-  color:#999;
-  font-size:15px;
-  flex:none;
-  width:1ch;
-  padding-top:5px;
-}
-.panel-list a{ color:#666; text-decoration:none; transition:color .2s; }
-.panel-list a:hover{ color:#000; }
-/* lo que todavía no está publicado no finge ser clickeable */
-.panel-list .unpublished{ color:#767676; }
-.panel-list .unpublished em{ font-style:normal; font-size:15px; letter-spacing:.08em; text-transform:uppercase; }
-
-/* placeholder del video: un 16:9 vacío, apenas más claro que el papel */
-.video{
-  aspect-ratio:16/9;
-  width:100%;
-  background:#fafafa;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  color:#767676;
-  font-size:17px;
-  letter-spacing:.02em;
-}
-
-.panel-close{
-  font:inherit;
-  font-size:11px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:#767676;
-  background:none;
-  border:0;
-  padding:0;
-  margin-top:48px;
-  cursor:pointer;
-  transition:color .2s;
-}
-.panel-close:hover{ color:#000; }
-.panel-close:focus-visible{ outline:1px solid #000; outline-offset:4px; }
+.panel-text a{ color:var(--gris); text-decoration:none; transition:color .2s; }
+.panel-text a:hover{ color:var(--tinta); }
 
 /* ---- footer ---- */
 .site-footer{
@@ -393,86 +361,41 @@ body{
   max-width:1106px;
   margin-top:96px;
   padding:32px 0 100px;
-  border-top:1px solid #ebebeb;
+  border-top:1px solid var(--linea);
 }
+/* el pie va en la letra de leer, no en la manuscrita: es un dato, no un
+   rótulo, y a este cuerpo la mano se vuelve difícil de descifrar */
 .site-footer p{
-  font-family:'Neue Haas Unica','Inter','Helvetica Neue',Arial,sans-serif;
-  font-size:13px;
-  letter-spacing:.02em;
-  color:#999;
+  font-family:var(--lectura);
+  font-size:16px;
+  line-height:1.5;
+  letter-spacing:0;
+  color:var(--gris);
 }
-
-/* ---- botón de hamburguesa (solo mobile) ----
-   en desktop .right ya está siempre visible en su columna, así que el botón
-   no existe ahí — display:none hasta que la media query lo prenda */
-.menu-toggle{
-  display:none;
-  position:fixed;
-  top:16px;
-  right:16px;
-  z-index:60;
-  width:36px;
-  height:36px;
-  /* del color del papel, no blanco: tapa el texto que scrollea por debajo
-     sin dibujar un cuadrado más claro que la página */
-  background:#F7F7F7;
-  border:0;
-  padding:0;
-  cursor:pointer;
-}
-.menu-toggle-bar{
-  display:block;
-  width:22px;
-  height:2px;
-  margin:5px auto;
-  background:#000;
-  transition:transform .2s ease, opacity .2s ease;
-}
-/* al abrir, las tres barras se convierten en una × */
-.menu-toggle[aria-expanded="true"] .menu-toggle-bar:nth-child(1){ transform:translateY(7px) rotate(45deg); }
-.menu-toggle[aria-expanded="true"] .menu-toggle-bar:nth-child(2){ opacity:0; }
-.menu-toggle[aria-expanded="true"] .menu-toggle-bar:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
-.menu-toggle:focus-visible{ outline:1px solid #000; outline-offset:4px; }
 
 @media (max-width:760px){
   body{ padding:56px 24px 0; }
-  /* el título comparte línea visual con el botón de hamburguesa, que es
-     fijo arriba a la derecha: menos aire abajo para que no queden separados */
-  .site-status{ margin-bottom:40px; }
+  .site-title{ margin-bottom:56px; }
   .all{ flex-direction:column; gap:40px; }
-  .left, .right{ max-width:100%; flex:none; padding-right:0; margin-top:0; }
+  .left{ max-width:100%; flex:none; padding-right:0; margin-top:0; }
   /* el cuerpo del proyecto acompaña a la portada también acá */
-  .para,
-  .panel-text,
-  .panel-list{ font-size:20px; line-height:26px; }
+  .para{ font-size:19px; line-height:1.6; }
+  .section-title{ font-size:38px; margin-top:64px; }
+  .note-title{ font-size:26px; }
+  .nota-back{ margin-bottom:44px; }
+  .nota-date{ margin-bottom:40px; }
+  .nota-body p{ font-size:19px; line-height:1.6; }
+  .nota-body h2{ font-size:26px; margin-top:48px; }
+  .note-desc{ font-size:17px; }
+  .site-footer p{ font-size:15px; }
+  .panel-text{ font-size:20px; line-height:26px; }
 
   /* la barra no cabe en una línea: "Home — Projects" y el × arriba,
      el nombre del proyecto en su propia línea debajo */
   .bar{ flex-wrap:wrap; gap:12px; padding-bottom:32px; }
   .bar-home{ flex:1 1 auto; font-size:18px; line-height:24px; }
-  .bar-close{ order:2; }
   .bar-name{ order:3; flex-basis:100%; margin-left:0; font-size:18px; line-height:24px; }
 
   .site-footer{ padding:32px 0 56px; }
 
-  /* Say hi + Personal notebook salen del flujo normal y se abren como un
-     panel flotante desde el botón de hamburguesa, en vez de vivir siempre
-     debajo de la bio como una tercera sección larga */
-  .menu-toggle{ display:block; }
-  .right{
-    display:none;
-    position:fixed;
-    top:64px;
-    right:16px;
-    left:16px;
-    max-height:calc(100vh - 88px);
-    overflow-y:auto;
-    background:#fff;
-    border:1px solid #ebebeb;
-    border-radius:8px;
-    box-shadow:0 12px 32px rgba(0,0,0,.14);
-    padding:24px;
-    z-index:55;
-  }
-  .right.menu-open{ display:block; }
 }

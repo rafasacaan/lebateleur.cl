@@ -3,3 +3,6 @@
 # un retorno de carro al final; el "?" lo matchea, porque escribir el \r acá
 # no sirve — git lo trata como fin de línea y lo descarta.
 Icon?
+
+# Configuración local de Claude Code: es de esta máquina, no del sitio.
+.claude/
