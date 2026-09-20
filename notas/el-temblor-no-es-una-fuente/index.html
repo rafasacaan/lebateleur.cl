@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://lebateleur.cl/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="le bateleur — el arcano I: el que tiene los instrumentos sobre la mesa y todavía no demostró nada.">
+<meta property="og:image:alt" content="le bateleur — ¿tendré una voz propia?">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="El temblor no es una fuente — le bateleur">
 <meta name="twitter:description" content="Perseguí la letra manuscrita de un blog ajeno buscando qué tipografía era, y la respuesta resultó ser que no era ninguna.">
@@ -24,21 +24,38 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+<script>
+(function(){try{var t=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro');document.documentElement.dataset.tema=t;}catch(e){}})();
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
-
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sometype+Mono:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="/style.css?v=4">
+<script src="/maquina.js?v=4" defer></script>
 </head>
 <body>
 
-<article class="nota">
-  <a class="nota-back" href="/">&larr; le bateleur</a>
+<svg class="defs" aria-hidden="true"><defs>
+<filter id="tinta" x="-3%" y="-10%" width="106%" height="120%">
+<feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="5" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feGaussianBlur in="d" stdDeviation="0.35"/>
+</filter>
+</defs></svg>
 
-  <h1 class="nota-title">El temblor no es una fuente</h1>
-  <p class="nota-date"><time datetime="2026-08-31">31 de agosto, 2026</time> <span class="note-tag">dummy</span></p>
+<svg class="grano" aria-hidden="true"><filter id="grano"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#grano)"/></svg>
 
-  <div class="nota-body">
+<main class="hoja nota escaneo">
+
+  <a class="volver" href="/">&larr; <span class="u-chico">volver</span></a>
+  <button type="button" class="tema" data-tema-boton><span class="u-chico">modo oscuro</span></button>
+
+  <p class="meta">NOTA &middot; 31 de agosto, 2026 &middot; [placeholder]</p>
+
+  <h1 class="titulo"><span class="u">El</span> <span class="u">temblor</span> <span class="u">no</span> <span class="u">es</span> <span class="u">una</span> <span class="u">fuente</span></h1>
+
+  <div class="prosa">
     <p>
       Encontré un blog cuyo título estaba escrito a mano. Decía, en letras
       torcidas y desparejas, que su autor no era una AI &mdash; que su escritura
@@ -113,12 +130,17 @@
       no se repitan idénticas. Una imitación de una mano, hecha por otra mano.
       Un truco, pero uno que sé cómo funciona.
     </p>
-  </div>
-</article>
+    </div>
 
-<footer class="site-footer">
-  <p>&copy; 2026 le bateleur &middot; santiago, chile</p>
-</footer>
+  <div class="aire"></div>
 
+  <footer class="pie">
+    <div>&copy; 2026 le bateleur</div>
+    <div class="pie-links"><a href="/#notas">todas las notas</a> <a class="contacto" href="#contacto" data-u="rafasacaan" data-d="gmail.com"><span class="u-chico">contacto</span></a></div>
+  </footer>
+
+</main>
+
+<script src="/tema.js?v=4" defer></script>
 </body>
 </html>

@@ -1,401 +1,211 @@
-/* la pila completa, en una variable para no repetirla en cada regla */
+/* le bateleur, v4: a máquina.
+   Una sola letra, Sometype Mono, en dos tonos: papel claro con tinta gris
+   oscuro, o carbón con tinta hueso. El grano de papel es un SVG fijo encima
+   de todo; el sangrado de tinta va solo en el titular, que es donde se nota
+   sin volver borroso el texto de leer. */
 :root{
-  --hand:'Gloria Hallelujah','Bradley Hand','Segoe Print',cursive;
-  /* la de leer: Gloria Hallelujah rotula, Literata sostiene el texto largo */
-  --lectura:Literata,Charter,Georgia,'Times New Roman',serif;
-  /* la medida de lectura, una sola vez: son los 33em de la prosa a 21px.
-     Va en px a propósito — en em cada bloque la resolvería contra su propio
-     cuerpo y la columna dejaría de estar alineada. */
-  --medida:693px;
-  --papel:#FFFFFF;
-  --tinta:#141414;
-  /* 5.68:1 sobre el blanco, cómodo por encima del 4.5 que pide WCAG AA. Tira
-     apenas a frío, del lado azulado en que estaba el fondo anterior. */
-  --gris:#666670;
-  /* las dos líneas del sitio: la que separa bloques y la que apenas insinúa
-     una fila. Van acá para que un cambio de papel no obligue a cazar hex
-     sueltos por el archivo. */
-  --linea:#E2E2E7;
-  --linea-suave:#F0F0F3;
+  --mono:"Sometype Mono","Courier New",Courier,monospace;
+  --papel:#ffffff;
+  --tinta:#2b2a27;
+  --gris:#5d5a54;
+  --grano:0.03;
+  --medida:900px;
 }
-
-/* La grilla viene de earvin.ca: dos columnas top-aligned bajo un margen
-   superior de 100px, links grises sin subrayado. Lo que cambió es el tono:
-   fondo blanco, tinta casi negra, y dos letras nada más: Gloria Hallelujah rotula
-   (nombre, secciones, bajadas) y Literata sostiene la prosa. No hay sans ni
-   mono. */
+:root[data-tema="oscuro"]{
+  --papel:#2b2a29;
+  --tinta:#ebe7de;
+  --gris:#a39f96;
+  --grano:0.10;
+}
 
 *{ box-sizing:border-box; margin:0; padding:0; }
-
-/* los headings existen por estructura, no por estilo: heredan tamaño y peso
-   del texto que los rodea, y cada clase decide cómo se ven */
 h1,h2,h3{ font-size:inherit; font-weight:inherit; line-height:inherit; }
 
-/* fuera de pantalla pero presente para lectores de pantalla y buscadores */
-
-html,body{ background:var(--papel); }
-
+html{ background:var(--papel); }
 body{
-  font-family:var(--hand);
+  font-family:var(--mono);
+  font-weight:400;
   color:var(--tinta);
-  font-size:15px;
-  line-height:24px;
-  -webkit-font-smoothing:antialiased;
-  /* column, no longer row: .all and .site-footer stack instead of sitting
-     side by side. align-items:center does the job justify-content used to
-     do when .all was the only child. */
+  background:var(--papel);
+  font-size:17px;
+  line-height:1.5;
+  min-height:100vh;
   display:flex;
   flex-direction:column;
-  align-items:center;
-  /* el alto del viewport es el piso de la página, y el margen de arriba pasó
-     a ser padding para que entre en ese cálculo (box-sizing:border-box).
-     Junto con el flex-grow de .all, esto deja el footer pegado abajo cuando
-     el contenido no alcanza a llenar la pantalla. */
-  min-height:100vh;
-  padding:100px 24px 0;
+  transition:background-color .3s, color .3s;
+  -webkit-font-smoothing:antialiased;
 }
+a{ color:inherit; transition:opacity .2s; }
+a:hover{ opacity:.65; }
+a:focus-visible{ outline:1px solid var(--tinta); outline-offset:4px; }
 
-/* el nombre del sitio. Va al mismo cuerpo que la prosa a propósito: en este
-   diseño la jerarquía la hace el espacio en blanco, no el tamaño. Queda
-   solo, arriba de todo y alineado con la columna izquierda, para que se lea
-   como el nombre del lugar y no como una sección más. */
-.site-title{
-  width:100%;
-  max-width:1106px;
-  /* misma letra que el resto de la página: acá el nombre no se distingue por
-     tipo sino por tamaño y por el aire que tiene alrededor. */
-  font-family:var(--hand);
-  font-weight:400;
-  font-size:clamp(2.2rem,11vw,140px);
-  line-height:1.05;
-  letter-spacing:0;
-  color:var(--tinta);
-  /* el único aire entre el nombre y el contenido: sin esto el título se pega
-     al primer párrafo y deja de leerse como cabecera */
-  margin-bottom:120px;
+/* el grano: fijo, encima de todo, sin capturar el mouse */
+.grano{
+  position:fixed; inset:0; width:100%; height:100%;
+  pointer-events:none; opacity:var(--grano); z-index:10;
 }
+/* los filtros de tinta viven en un svg vacío al inicio del body */
+.defs{ position:absolute; width:0; height:0; overflow:hidden; }
 
-/* una sola columna desde que se fue .right: .left es el ancho completo y
-   .all existe solo para el flex:1 0 auto que empuja el footer al fondo */
-.left{ width:100%; }
+/* subrayado a máquina: palabra por palabra, con espacio en blanco entre medio */
+.u{ text-decoration:underline; text-underline-offset:.18em; text-decoration-thickness:.06em; }
+.u-chico{ text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:.07em; }
 
-.all{
-  display:flex;
+/* ---- la hoja ---- */
+.hoja{
   width:100%;
-  max-width:1106px;
-  gap:52px;
-  /* crece para ocupar el espacio sobrante y empujar el footer al fondo, sin
-     perder los 96px de margen que el footer ya trae */
+  max-width:1280px;
+  margin:0 auto;
+  padding:104px 100px 64px;
   flex:1 0 auto;
-}
-
-/* the paragraph is the unit of everything, same as earvin: links live inside
-   the flow of the text, separated only by <br> */
-.para{
-  display:block;
-  /* 21px / 1.58 son las medidas de Medium, y el max-width es lo que las hace
-     servir: sin él la línea se estira a los 1106px de la columna y pasa de
-     ~66 a ~110 caracteres, que es donde el ojo pierde el renglón al volver. */
-  font-family:var(--lectura);
-  font-size:21px;
-  line-height:1.58;
-  letter-spacing:0;
-  font-weight:400;
-  color:var(--tinta);
-  max-width:var(--medida);
-}
-
-/* rótulo de sección: la manuscrita marca los rótulos, Literata sostiene la
-   prosa. La mayúscula y el tracking hacen el resto: no hay cambio de peso ni
-   de color, solo de letra. */
-.section-title{
-  font-family:var(--hand);
-  font-size:52px;
-  line-height:1.15;
-  font-weight:400;
-  text-transform:uppercase;
-  color:var(--tinta);
-  margin-top:84px;
-  /* Gloria Hallelujah publica un solo peso, así que un rótulo más liviano no
-     se puede pedir con font-weight. Esto es lo más cercano: un contorno del
-     color del papel pintado ENCIMA del relleno, que se come el borde del
-     glifo y lo adelgaza de verdad. Sale de --papel y no de un #fff fijo para
-     que siga funcionando si el fondo cambia. Si el navegador no soporta
-     text-stroke, el rótulo vuelve al trazo original y no se rompe nada. */
-  -webkit-text-stroke:1.35px var(--papel);
-  letter-spacing:-.06em;
-}
-
-/* una nota del índice. */
-.note{
-  max-width:var(--medida);
-  margin-top:40px;
-}
-/* entre dos notas hace falta más aire que entre el rótulo y la primera:
-   si no, la descripción de una y el título de la siguiente se leen juntos */
-.note + .note{ margin-top:52px; }
-/* el título en la mano, afinado y apretado. font-weight:400 obligatorio:
-   Gloria Hallelujah solo publica ese peso, y cualquier valor mayor le pinta
-   una negrita sintética que le arruina el trazo. */
-.note-title{
-  font-family:var(--hand);
-  font-size:31px;
-  line-height:1.25;
-  font-weight:400;
-  color:var(--tinta);
-  /* Gloria Hallelujah publica un solo peso, así que un rótulo más liviano no
-     se puede pedir con font-weight. Esto es lo más cercano: un contorno del
-     color del papel pintado ENCIMA del relleno, que se come el borde del
-     glifo y lo adelgaza de verdad. Sale de --papel y no de un #fff fijo para
-     que siga funcionando si el fondo cambia. Si el navegador no soporta
-     text-stroke, el rótulo vuelve al trazo original y no se rompe nada. */
-  -webkit-text-stroke:1.35px var(--papel);
-  letter-spacing:-.06em;
-}
-/* el link hereda todo del h3: el título ES el link, así que no cambia de
-   color ni se subraya en reposo. El hover lo marca con el gris, igual que
-   el resto de los links del sitio pero al revés — acá el reposo es negro. */
-.note-title a{
-  color:inherit;
-  text-decoration:none;
-  transition:color .2s;
-}
-.note-title a:hover{ color:var(--gris); }
-.note-title a:focus-visible{ outline:1px solid var(--tinta); outline-offset:4px; }
-
-/* marca de contenido de relleno. Va junto a la fecha y no en el título para
-   que no compita con el link; el recuadro la separa del dato real. */
-.note-tag{
-  display:inline-block;
-  font-family:var(--lectura);
-  font-size:11px;
-  line-height:1;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--gris);
-  border:1px solid var(--linea);
-  border-radius:2px;
-  padding:3px 6px 2px;
-  margin-left:6px;
-  vertical-align:1px;
-}
-
-.note-date{
-  font-family:var(--lectura);
-  font-size:15px;
-  line-height:1.5;
-  color:var(--gris);
-  margin-top:6px;
-}
-.note-desc{
-  font-family:var(--lectura);
-  font-size:19px;
-  line-height:1.5;
-  color:var(--gris);
-  margin-top:10px;
-}
-
-/* ---- la página de una nota ---- */
-
-/* el contenedor toma el mismo ancho que .all en la portada, para que la nota
-   arranque en el mismo eje izquierdo y no quede centrada; la medida de
-   lectura la ponen los hijos. */
-.nota{
-  width:100%;
-  max-width:1106px;
-  /* crece para empujar el footer al fondo cuando la nota es corta, igual que
-     hace .all en la portada */
-  flex:1 0 auto;
-  /* el aire entre el final del texto y la línea del footer: son estos 40px
-     más los 96px de margen que el footer ya trae */
-  padding-bottom:40px;
-}
-.nota-title,
-.nota-date,
-.nota-body{ max-width:var(--medida); }
-
-/* volver, arriba de todo. Va chico y gris: es salida, no destino. */
-.nota-back{
-  display:inline-block;
-  font-family:var(--lectura);
-  font-size:15px;
-  color:var(--gris);
-  text-decoration:none;
-  transition:color .2s;
-  margin-bottom:64px;
-}
-.nota-back:hover{ color:var(--tinta); }
-.nota-back:focus-visible{ outline:1px solid var(--tinta); outline-offset:4px; }
-
-/* el título de la nota, en la mano y sin negrita sintética — Gloria
-   Hallelujah solo publica el peso 400. Más chico que el nombre del sitio: acá la cabeza es la nota,
-   pero el sitio sigue siendo el lugar. */
-.nota-title{
-  font-family:var(--hand);
-  font-size:clamp(2rem,6vw,58px);
-  line-height:1.1;
-  font-weight:400;
-  color:var(--tinta);
-  text-wrap:balance;
-}
-.nota-date{
-  font-family:var(--lectura);
-  font-size:15px;
-  line-height:1.5;
-  color:var(--gris);
-  margin-top:14px;
-  margin-bottom:56px;
-}
-
-/* el cuerpo de la nota: las mismas medidas de la prosa de la portada */
-.nota-body p{
-  font-family:var(--lectura);
-  font-size:21px;
-  line-height:1.58;
-  color:var(--tinta);
-}
-.nota-body p + p{ margin-top:1.4em; }
-
-/* subtítulo dentro de la nota: la mano otra vez, como los rótulos */
-.nota-body h2{
-  font-family:var(--hand);
-  font-size:31px;
-  line-height:1.25;
-  font-weight:400;
-  color:var(--tinta);
-  margin-top:64px;
-  margin-bottom:16px;
-}
-
-/* una cita o un aparte: sangrado y en gris, sin comillas decorativas */
-.nota-body blockquote{
-  margin-top:1.4em;
-  padding-left:24px;
-  border-left:2px solid var(--linea);
-}
-.nota-body blockquote p{ color:var(--gris); }
-
-.nota-body a{
-  color:var(--gris);
-  text-decoration:none;
-  border-bottom:1px solid var(--linea);
-  transition:color .2s, border-color .2s;
-}
-.nota-body a:hover{ color:var(--tinta); border-bottom-color:var(--tinta); }
-
-.para a{
-  color:var(--gris);
-  text-decoration:none;
-  transition:color .2s;
-}
-.para a:hover{ color:var(--tinta); }
-
-.para em{ font-style:italic; }
-/* el 700 viene pedido en el <link> de Inter, así no hay bold sintético */
-.para strong{ font-weight:700; }
-
-/* mismo peso que el cuerpo: el espacio de arriba ya la separa de la prosa,
-   no hace falta bold para anunciar la sección. Mayúscula para que "Atelier",
-   "Blog" y cualquier título de sección que se agregue después se lean como
-   rótulos, no como más prosa — a diferencia de los nombres propios de abajo
-   (los títulos de las notas), que se quedan en minúscula. */
-
-/* espaciador chico (8px, casi solo el line-height) — para cuando dos líneas
-   son parte del mismo bloque visual y no de secciones distintas, como el
-   heading/tagline/links de "Personal notebook", que deben leerse pegados
-   entre sí en vez de separados como Atelier y Blog lo están. */
-
-/* ---- lista del blog ---- */
-
-/* ---- página de proyecto ----
-   comparte el ancho máximo de la portada para que las dos se alineen */
-.project-view{
-  width:100%;
-  max-width:1106px;
-}
-
-.bar{
   display:flex;
-  align-items:baseline;
-  gap:24px;
-  padding-bottom:44px;
+  flex-direction:column;
+  position:relative;
 }
-.bar-home{
-  font-size:35px;
-  line-height:52px;
-  letter-spacing:0;
-  text-transform:uppercase;
-  color:var(--gris);
+
+/* botón de tema y "volver", arriba en las esquinas */
+.tema, .volver{
+  position:absolute; top:36px;
+  min-height:44px; display:flex; align-items:center;
+  padding:10px 8px;
+  font:inherit; font-size:15px; letter-spacing:.02em;
+  color:var(--tinta); background:transparent; border:0; cursor:pointer;
   text-decoration:none;
-  transition:color .2s;
 }
-.bar-home:hover{ color:var(--tinta); }
-.bar-name{
-  font-size:35px;
-  line-height:52px;
-  letter-spacing:0;
-  text-transform:uppercase;
-  color:var(--tinta);
-  margin-left:auto;
+.tema{ right:92px; }
+.volver{ left:92px; }
+.volver > span{ margin-left:8px; }
+
+.titulo{
+  max-width:1080px;
+  font-size:clamp(28px,4vw,48px);
+  line-height:1.2;
+  filter:url(#tinta);
+}
+.titulo .u{ text-underline-offset:8px; }
+
+.tesis{
+  padding-top:32px;
+  max-width:1000px;
+  font-size:clamp(18px,2.6vw,34px);
+  line-height:1.3;
 }
 
-.bar-home:focus-visible,
+.aire{ flex-grow:1; min-height:160px; }
 
-/* el cuerpo del proyecto lee al mismo tamaño que la portada (22px/28px):
-   ya no es un panel anidado bajo la bio, es su propia página */
-.project-body{ max-width:38em; }
+.guino{ font-size:clamp(17px,2.2vw,28px); font-style:italic; }
 
-.panel-text{
-  font-size:35px;
-  line-height:52px;
-  letter-spacing:0;
-  color:var(--tinta);
-}
-.panel-text + .panel-text{ margin-top:20px; }
-.panel-text a{ color:var(--gris); text-decoration:none; transition:color .2s; }
-.panel-text a:hover{ color:var(--tinta); }
+.rotulo{ padding-top:140px; font-size:18px; letter-spacing:.04em; }
 
-/* ---- footer ---- */
-.site-footer{
-  width:100%;
-  max-width:1106px;
-  margin-top:96px;
-  padding:32px 0 100px;
-  border-top:1px solid var(--linea);
+.notas{ display:flex; flex-direction:column; padding-top:24px; }
+.nota-link{
+  display:flex; justify-content:space-between; align-items:baseline; gap:32px;
+  padding:14px 0; text-decoration:none;
 }
-/* el pie va en la letra de leer, no en la manuscrita: es un dato, no un
-   rótulo, y a este cuerpo la mano se vuelve difícil de descifrar */
-.site-footer p{
-  font-family:var(--lectura);
-  font-size:16px;
-  line-height:1.5;
-  letter-spacing:0;
-  color:var(--gris);
+.nota-link .t{ font-size:24px; }
+.nota-link time{ font-size:15px; color:var(--gris); white-space:nowrap; }
+
+.pie{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding-top:72px; font-size:14px; color:var(--gris);
 }
+.pie a{ text-decoration:none; color:var(--gris); }
+.pie-links{ display:flex; gap:28px; }
+
+/* ---- una nota ---- */
+.hoja.nota{ padding-top:128px; }
+.meta{ font-size:14px; color:var(--gris); letter-spacing:.04em; }
+.nota .titulo{ padding-top:20px; max-width:1000px; font-size:clamp(24px,3.4vw,40px); }
+.nota .titulo .u{ text-underline-offset:7px; }
+
+.seccion{ padding-top:56px; font-size:16px; letter-spacing:.04em; }
+.seccion:first-of-type{ padding-top:72px; }
+
+.idea{ padding-top:20px; max-width:var(--medida); display:flex; flex-direction:column; gap:16px; font-size:19px; line-height:1.55; }
+
+.preguntas{ padding-top:20px; max-width:var(--medida); list-style:none; display:flex; flex-direction:column; gap:20px; font-size:18px; line-height:1.45; }
+.preguntas li{ display:flex; gap:20px; }
+.preguntas .n{ flex-shrink:0; width:40px; color:var(--gris); }
+.preguntas .q{ display:flex; flex-direction:column; gap:6px; }
+.preguntas .r{ font-size:15px; line-height:1.55; color:var(--gris); }
+
+.fuentes{ padding-top:20px; max-width:980px; list-style:none; display:flex; flex-direction:column; gap:16px; font-size:15px; line-height:1.45; }
+.fuentes li{ display:flex; gap:20px; }
+.fuentes .n{ flex-shrink:0; width:40px; color:var(--gris); }
+.fuentes .f{ display:flex; flex-direction:column; gap:4px; }
+.fuentes a{ text-decoration:none; }
+.fuentes .autor{ color:var(--gris); }
+.fuentes .r{ font-size:14px; line-height:1.5; color:var(--gris); }
+
+/* el índice de la portada: la misma lista que las fuentes, con el título
+   un poco más grande */
+.indice a{ font-size:16px; }
+.indice .r{ padding-top:2px; }
+
+/* prosa larga, para notas que son texto y no plantilla */
+.prosa{ padding-top:56px; max-width:var(--medida); }
+.prosa p{ font-size:18px; line-height:1.6; }
+.prosa p + p{ margin-top:1.3em; }
+.prosa h2{ padding-top:48px; padding-bottom:14px; font-size:16px; letter-spacing:.04em; text-transform:uppercase; }
+.prosa blockquote{ margin-top:1.3em; padding-left:24px; border-left:2px solid var(--gris); }
+.prosa blockquote p{ color:var(--gris); }
+.prosa em{ font-style:italic; }
+.prosa a{ text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:.06em; }
+
+.nota .aire{ min-height:72px; }
+.nota .pie{ padding-top:0; }
+
+/* ---- 404 ---- */
+.nada{ padding-top:56px; max-width:var(--medida); font-size:22px; line-height:1.55; }
+.nada p + p{ margin-top:1.2em; }
 
 @media (max-width:760px){
-  body{ padding:56px 24px 0; }
-  .site-title{ margin-bottom:56px; }
-  .all{ flex-direction:column; gap:40px; }
-  .left{ max-width:100%; flex:none; padding-right:0; margin-top:0; }
-  /* el cuerpo del proyecto acompaña a la portada también acá */
-  .para{ font-size:19px; line-height:1.6; }
-  .section-title{ font-size:38px; margin-top:64px; }
-  .note-title{ font-size:26px; }
-  .nota-back{ margin-bottom:44px; }
-  .nota-date{ margin-bottom:40px; }
-  .nota-body p{ font-size:19px; line-height:1.6; }
-  .nota-body h2{ font-size:26px; margin-top:48px; }
-  .note-desc{ font-size:17px; }
-  .site-footer p{ font-size:15px; }
-  .panel-text{ font-size:20px; line-height:26px; }
-
-  /* la barra no cabe en una línea: "Home — Projects" y el × arriba,
-     el nombre del proyecto en su propia línea debajo */
-  .bar{ flex-wrap:wrap; gap:12px; padding-bottom:32px; }
-  .bar-home{ flex:1 1 auto; font-size:18px; line-height:24px; }
-  .bar-name{ order:3; flex-basis:100%; margin-left:0; font-size:18px; line-height:24px; }
-
-  .site-footer{ padding:32px 0 56px; }
-
+  .hoja{ padding:56px 28px 36px; }
+  .hoja.nota{ padding-top:96px; }
+  .tema{ top:8px; right:20px; font-size:13px; }
+  .volver{ top:8px; left:20px; font-size:13px; }
+  .titulo .u, .titulo .u .g{ text-underline-offset:5px; }
+  .tesis{ padding-top:20px; }
+  .aire{ min-height:80px; }
+  .rotulo{ padding-top:80px; font-size:14px; }
+  .notas{ padding-top:14px; }
+  .nota-link{ gap:16px; padding:12px 0; }
+  .nota-link .t{ font-size:16px; }
+  .nota-link time{ font-size:13px; }
+  .pie{ padding-top:44px; font-size:12px; }
+  .pie-links{ gap:16px; }
+  .seccion{ padding-top:48px; font-size:15px; }
+  .seccion:first-of-type{ padding-top:52px; }
+  .idea{ font-size:16px; }
+  .preguntas{ font-size:16px; }
+  .preguntas .r{ font-size:14px; }
+  .preguntas .n, .fuentes .n{ width:32px; }
+  .fuentes{ font-size:14px; }
+  .fuentes .r{ font-size:13px; }
+  .prosa p{ font-size:16px; }
+  .indice a{ font-size:15px; }
 }
+
+/* ---- la hoja escaneada (portada) ----
+   cada letra recibe sus variables desde maquina.js: un desplazamiento
+   vertical, una rotación mínima, y un "peso" que engorda o afina el trazo
+   con text-shadow. El titular conserva además el sangrado del filtro svg. */
+.pal{ white-space:nowrap; }
+.g{
+  display:inline-block;
+  transform:translateY(var(--dy,0)) rotate(var(--rot,0));
+  opacity:var(--op,1);
+  text-shadow:0 0 var(--peso,0) currentColor, 0 0 var(--peso,0) currentColor;
+}
+/* el subrayado no entra a un inline-block, así que se pinta letra por
+   letra: cada una con su propio desplazamiento, la línea queda quebrada
+   como en una máquina de verdad. */
+.u .g{ text-decoration:underline; text-underline-offset:8px; text-decoration-thickness:.06em; }
+.u-chico .g{ text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:.07em; }
+.mancha{
+  position:absolute; display:block;
+  background:var(--tinta);
+  filter:blur(.3px);
+  pointer-events:none;
+}
+@media (prefers-reduced-motion: reduce){ .g{ transform:none; } }

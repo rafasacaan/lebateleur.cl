@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>le bateleur — un cuaderno abierto</title>
-<meta name="description" content="Un cuaderno abierto. Un comienzo. Alguien que tiene la destreza pero que aún no se la ha demostrado al resto — o posiblemente un charlatán.">
-<meta property="og:title" content="le bateleur — un cuaderno abierto">
-<meta property="og:description" content="Un cuaderno abierto. Un comienzo. Alguien que tiene la destreza pero que aún no se la ha demostrado al resto — o posiblemente un charlatán.">
+<title>le bateleur — ¿tendré una voz propia?</title>
+<meta name="description" content="Le Bateleur es un microtaller experimental para encontrar una voz propia y entender cómo se diferencia de la de un LLM.">
+<meta property="og:title" content="le bateleur — ¿tendré una voz propia?">
+<meta property="og:description" content="Un microtaller experimental para encontrar una voz propia y entender cómo se diferencia de la de un LLM.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lebateleur.cl/">
 <meta property="og:image" content="https://lebateleur.cl/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="le bateleur — el arcano I: el que tiene los instrumentos sobre la mesa y todavía no demostró nada.">
+<meta property="og:image:alt" content="le bateleur — ¿tendré una voz propia?">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="le bateleur — un cuaderno abierto">
-<meta name="twitter:description" content="Un cuaderno abierto. Un comienzo. Alguien que tiene la destreza pero que aún no se la ha demostrado al resto — o posiblemente un charlatán.">
+<meta name="twitter:title" content="le bateleur — ¿tendré una voz propia?">
+<meta name="twitter:description" content="Un microtaller experimental para encontrar una voz propia y entender cómo se diferencia de la de un LLM.">
 <meta name="twitter:image" content="https://lebateleur.cl/og.png">
 <link rel="canonical" href="https://lebateleur.cl/">
 
@@ -23,63 +23,60 @@
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-<!-- Dos familias, las dos de Google Fonts con licencia abierta: Mansalva
-     rotula (nombre, secciones, títulos de nota) y Literata sostiene la prosa.
-     Van en un solo pedido. -->
+<!-- el tema se decide antes de pintar para que no parpadee: lo guardado
+     manda; si no hay nada guardado, lo que prefiera el sistema -->
+<script>
+(function(){try{var t=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro');document.documentElement.dataset.tema=t;}catch(e){}})();
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
-
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sometype+Mono:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="/style.css?v=4">
+<script src="/maquina.js?v=4" defer></script>
 </head>
 <body>
 
-<!-- El nombre del sitio, ahora sí visible: es el h1 de la página y el único
-     rótulo en minúscula que no es una sección. -->
-<h1 class="site-title">le bateleur</h1>
+<svg class="defs" aria-hidden="true"><defs>
+<filter id="tinta" x="-3%" y="-10%" width="106%" height="120%">
+<feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="5" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feGaussianBlur in="d" stdDeviation="0.4"/>
+</filter>
+</defs></svg>
 
-<div class="all">
+<svg class="grano" aria-hidden="true"><filter id="grano"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#grano)"/></svg>
 
-  <div class="left">
-    <!-- El sitio dicho a través de la carta: el arcano I es el que tiene los
-         instrumentos sobre la mesa y todavía no probó nada. Es todo lo que
-         hay en la portada, además del nombre. -->
-    <p class="para">
-      le bateleur es un cuaderno abierto, es un comienzo, es aquel que tiene
-      la destreza pero que aún no se la ha demostrado al resto.
-      <br><br>
-      le bateleur también es un artista, o posiblemente un charlatán. o es
-      alguien que podría sorprenderse a sí mismo de lo que es capaz de hacer.
-    </p>
+<main class="hoja nota escaneo">
 
-    <!-- Rótulo de sección. Va en la mano y en mayúscula para que se lea como
-         rótulo y no como más prosa. -->
-    <h2 class="section-title">Notas</h2>
+  <button type="button" class="tema" data-tema-boton><span class="u-chico">modo oscuro</span></button>
 
-    <!-- El índice de notas, de la más nueva a la más vieja. Cada una es
-         título, fecha y una línea de qué hay adentro. El link vive dentro
-         del h3 y hereda su tipo y tamaño: el título ES el link. La fecha va
-         en <time> con datetime en ISO, que es lo que leen los buscadores.
-         La etiqueta "dummy" marca que el texto es de relleno, no definitivo:
-         se saca borrando el <span>. -->
-    <article class="note">
-      <h3 class="note-title"><a href="/notas/el-temblor-no-es-una-fuente/">El temblor no es una fuente</a></h3>
-      <p class="note-date"><time datetime="2026-08-31">31 de agosto, 2026</time> <span class="note-tag">dummy</span></p>
-      <p class="note-desc">Perseguí una letra ajena y descubrí que no era tipografía.</p>
-    </article>
+  <p class="meta">LE BATELEUR &middot; Santiago, Chile &middot; Microtaller experimental</p>
 
-    <article class="note">
-      <h3 class="note-title"><a href="/notas/un-complice-no-un-reemplazo/">Un cómplice, no un reemplazo</a></h3>
-      <p class="note-date"><time datetime="2026-08-24">24 de agosto, 2026</time> <span class="note-tag">dummy</span></p>
-      <p class="note-desc">Escribo en cuadernos que nunca releo. Empecé por ahí.</p>
-    </article>
+  <h1 class="titulo"><span class="u">¿Tendré</span> <span class="u">una</span> <span class="u">voz</span> <span class="u">propia?</span></h1>
+
+  <h2 class="seccion"><span class="u-chico">IDEA CENTRAL:</span></h2>
+  <div class="idea">
+    <p>Hace poco tiempo descubrí el lindísimo ejercicio de escribir y me di cuenta que lo que escribo, por malo que sea, captura una &ldquo;esencia&rdquo; que lo hace único.</p>
+    <p>Quiero entender qué es &ldquo;eso&rdquo; y cómo puedo tener acceso a ese lugar donde está guardado más de &ldquo;eso&rdquo;.</p>
   </div>
 
-</div>
+  <h2 id="notas" class="seccion"><span class="u-chico">NOTAS:</span></h2>
+  <ol class="fuentes indice" aria-labelledby="notas">
+    <li><span class="n">01</span><div class="f"><a href="/notas/la-voz-promedio/">La voz promedio: ¿se puede medir? [placeholder]</a><div class="r"><time datetime="2026-08-02">02 ago 2026</time> &middot; perplejidad, vocabulario en exceso, y por qué los detectores fallan.</div></div></li>
+    <li><span class="n">02</span><div class="f"><a href="/notas/la-voz-propia/">La voz propia: ¿se puede medir? [placeholder]</a><div class="r"><time datetime="2026-08-21">21 ago 2026</time> &middot; estilometría: la firma está en las palabras invisibles.</div></div></li>
+    <li><span class="n">03</span><div class="f"><a href="/notas/dos-voces-frente-a-frente/">Dos voces, frente a frente [placeholder]</a><div class="r"><time datetime="2026-09-12">12 sep 2026</time> &middot; medir las dos voces con la misma regla y mirar dónde se separan.</div></div></li>
+  </ol>
 
-<footer class="site-footer">
-  <p>&copy; 2026 le bateleur &middot; santiago, chile</p>
-</footer>
+  <div class="aire"></div>
 
+  <footer class="pie">
+    <div>&copy; 2026 le bateleur</div>
+    <div class="pie-links"><span>santiago, chile</span> <a class="contacto" href="#contacto" data-u="rafasacaan" data-d="gmail.com"><span class="u-chico">contacto</span></a></div>
+  </footer>
+
+</main>
+
+<script src="/tema.js?v=4" defer></script>
 </body>
 </html>

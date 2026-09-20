@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La voz promedio: ¿se puede medir? — le bateleur</title>
+<meta name="description" content="Sobre cómo se mide la voz promedio de un LLM: perplejidad, vocabulario en exceso, detectores, y por qué fallan.">
+<meta property="og:title" content="La voz promedio: ¿se puede medir? — le bateleur">
+<meta property="og:description" content="Sobre cómo se mide la voz promedio de un LLM: perplejidad, vocabulario en exceso, detectores, y por qué fallan.">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-08-02">
+<meta property="og:url" content="https://lebateleur.cl/notas/la-voz-promedio/">
+<meta property="og:image" content="https://lebateleur.cl/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="le bateleur — ¿tendré una voz propia?">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="La voz promedio: ¿se puede medir? — le bateleur">
+<meta name="twitter:description" content="Sobre cómo se mide la voz promedio de un LLM: perplejidad, vocabulario en exceso, detectores, y por qué fallan.">
+<meta name="twitter:image" content="https://lebateleur.cl/og.png">
+<link rel="canonical" href="https://lebateleur.cl/notas/la-voz-promedio/">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<script>
+(function(){try{var t=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro');document.documentElement.dataset.tema=t;}catch(e){}})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sometype+Mono:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="/style.css?v=4">
+<script src="/maquina.js?v=4" defer></script>
+</head>
+<body>
+
+<svg class="defs" aria-hidden="true"><defs>
+<filter id="tinta" x="-3%" y="-10%" width="106%" height="120%">
+<feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="5" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feGaussianBlur in="d" stdDeviation="0.35"/>
+</filter>
+</defs></svg>
+
+<svg class="grano" aria-hidden="true"><filter id="grano"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#grano)"/></svg>
+
+<main class="hoja nota escaneo">
+
+  <a class="volver" href="/">&larr; <span class="u-chico">volver</span></a>
+  <button type="button" class="tema" data-tema-boton><span class="u-chico">modo oscuro</span></button>
+
+  <p class="meta">NOTA 01 &middot; 02 ago 2026 &middot; [placeholder]</p>
+
+  <h1 class="titulo"><span class="u">La</span> <span class="u">voz</span> <span class="u">promedio:</span> <span class="u">¿se</span> <span class="u">puede</span> <span class="u">medir?</span></h1>
+
+  <h2 class="seccion"><span class="u-chico">IDEA CENTRAL:</span></h2>
+  <div class="idea">
+    <p>Un LLM escribe eligiendo, palabra por palabra, entre las continuaciones más probables. Esa preferencia deja huellas medibles: poca sorpresa de una palabra a la siguiente (baja perplejidad), un ritmo parejo entre frases, un vocabulario favorito (“delves”, “underscores”, “showcasing”) y estructuras que se repiten.</p>
+    <p>Hipótesis de la nota: la voz promedio no es un estilo, es una distribución, y por eso se puede describir con números. La pregunta difícil es si esos números separan máquina de persona, o solo separan lo genérico de lo específico.</p>
+  </div>
+
+  <h2 class="seccion"><span class="u-chico">PREGUNTAS:</span></h2>
+  <ol class="preguntas">
+    <li><span class="n">1.</span><div class="q"><div>¿Qué indicadores?</div><div class="r">Perplejidad, curvatura de probabilidad, rango de cada palabra dentro de lo que el modelo esperaba, diversidad léxica, vocabulario en exceso y variación en el largo de las frases.</div></div></li>
+    <li><span class="n">2.</span><div class="q"><div>¿Cómo los mido?</div><div class="r">Con un modelo abierto que puntúe cada token del texto (GLTR, Binoculars), con métricas de diversidad sobre el texto mismo (MTLD) y comparando frecuencias de palabras antes y después de 2022.</div></div></li>
+    <li><span class="n">3.</span><div class="q"><div>¿Funcionan?</div><div class="r">En laboratorio, bastante. En la práctica, mal: fallan con textos editados o parafraseados y castigan a quienes escriben en su segundo idioma. OpenAI retiró su propio clasificador en 2023 por baja precisión.</div></div></li>
+  </ol>
+
+  <h2 class="seccion"><span class="u-chico">FUENTES:</span></h2>
+  <ol class="fuentes">
+    <li><span class="n">01</span><div class="f"><a href="https://arxiv.org/abs/1906.04043" rel="noopener"><span class="autor">Gehrmann, Strobelt y Rush (2019)</span>&mdash; GLTR: Statistical Detection and Visualization of Generated Text &#8599;</a><div class="r">Colorea cada palabra según qué tan esperable era. El mejor punto de partida para ver la voz promedio.</div></div></li>
+    <li><span class="n">02</span><div class="f"><a href="http://gltr.io/" rel="noopener"><span class="autor">GLTR (demo)</span>&mdash; gltr.io &#8599;</a><div class="r">La herramienta para probar con tus propios textos.</div></div></li>
+    <li><span class="n">03</span><div class="f"><a href="https://arxiv.org/abs/2301.11305" rel="noopener"><span class="autor">Mitchell et al. (2023)</span>&mdash; DetectGPT: Zero-Shot Machine-Generated Text Detection using Probability Curvature &#8599;</a><div class="r">El texto de máquina se ubica en picos de probabilidad; si lo perturbas, cae.</div></div></li>
+    <li><span class="n">04</span><div class="f"><a href="https://arxiv.org/abs/2310.05130" rel="noopener"><span class="autor">Fast-DetectGPT (2023)</span>&mdash; Efficient Zero-Shot Detection via Conditional Probability Curvature &#8599;</a><div class="r">La misma idea, mucho más barata de correr.</div></div></li>
+    <li><span class="n">05</span><div class="f"><a href="https://arxiv.org/abs/2401.12070" rel="noopener"><span class="autor">Hans et al. (2024)</span>&mdash; Spotting LLMs With Binoculars &#8599;</a><div class="r">Compara la perplejidad de dos modelos. Código abierto para probarlo.</div></div></li>
+    <li><span class="n">06</span><div class="f"><a href="https://github.com/ahans30/Binoculars" rel="noopener"><span class="autor">Binoculars (código)</span>&mdash; github.com/ahans30/Binoculars &#8599;</a><div class="r">Implementación lista para usar.</div></div></li>
+    <li><span class="n">07</span><div class="f"><a href="https://www.science.org/doi/10.1126/sciadv.adt3813" rel="noopener"><span class="autor">Kobak et al. (2025)</span>&mdash; Delving into LLM-assisted writing in biomedical publications through excess vocabulary &#8599;</a><div class="r">Mide la voz promedio por las palabras que se dispararon después de ChatGPT.</div></div></li>
+    <li><span class="n">08</span><div class="f"><a href="https://arxiv.org/abs/2404.01268" rel="noopener"><span class="autor">Liang et al. (2024)</span>&mdash; Mapping the Increasing Use of LLMs in Scientific Papers &#8599;</a><div class="r">Estima a nivel de corpus cuánto texto ya viene de un LLM.</div></div></li>
+    <li><span class="n">09</span><div class="f"><a href="https://link.springer.com/article/10.3758/BRM.42.2.381" rel="noopener"><span class="autor">McCarthy y Jarvis (2010)</span>&mdash; MTLD, vocd-D, and HD-D: a validation study of lexical diversity &#8599;</a><div class="r">Cómo medir diversidad léxica sin que el largo del texto te engañe.</div></div></li>
+    <li><span class="n">10</span><div class="f"><a href="https://arxiv.org/abs/2301.10226" rel="noopener"><span class="autor">Kirchenbauer et al. (2023)</span>&mdash; A Watermark for Large Language Models &#8599;</a><div class="r">La alternativa: detectar por diseño (marca de agua), no por estilo.</div></div></li>
+    <li><span class="n">11</span><div class="f"><a href="https://arxiv.org/abs/2303.11156" rel="noopener"><span class="autor">Sadasivan et al. (2023)</span>&mdash; Can AI-Generated Text be Reliably Detected? &#8599;</a><div class="r">El argumento en contra: parafrasear rompe casi todos los detectores.</div></div></li>
+    <li><span class="n">12</span><div class="f"><a href="https://arxiv.org/abs/2304.02819" rel="noopener"><span class="autor">Liang et al. (2023)</span>&mdash; GPT detectors are biased against non-native English writers &#8599;</a><div class="r">Lo formulaico humano y la salida de un LLM se confunden.</div></div></li>
+    <li><span class="n">13</span><div class="f"><a href="https://openai.com/index/new-ai-classifier-for-indicating-ai-written-text/" rel="noopener"><span class="autor">OpenAI (2023)</span>&mdash; New AI classifier for indicating AI-written text &#8599;</a><div class="r">El anuncio y, al pie, la nota de su retiro por baja precisión.</div></div></li>
+  </ol>
+
+  <div class="aire"></div>
+
+  <footer class="pie">
+    <div>&copy; 2026 le bateleur</div>
+    <div class="pie-links"><a href="/#notas">todas las notas</a> <a class="contacto" href="#contacto" data-u="rafasacaan" data-d="gmail.com"><span class="u-chico">contacto</span></a></div>
+  </footer>
+
+</main>
+
+<script src="/tema.js?v=4" defer></script>
+</body>
+</html>
