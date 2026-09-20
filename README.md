@@ -30,7 +30,7 @@ CNAME                      el dominio, lo lee GitHub Pages
 ```
 
 Rutas publicadas: `/`, `/notas/la-voz-promedio/`, `/notas/la-voz-propia/`,
-`/notas/dos-voces-frente-a-frente/`. Las notas van marcadas `[placeholder]`
+`/notas/dos-voces-frente-a-frente/`, `/notas/un-nervio-moral/`. Las notas van marcadas `[placeholder]`
 mientras sean ideas en curso. Hay dos notas más de la versión anterior del
 sitio, `el-temblor-no-es-una-fuente` y `un-complice-no-un-reemplazo`, que
 siguen en línea pero no están en el índice.
@@ -90,7 +90,7 @@ junta al cargar, para que los bots que rastrean páginas no la cosechen.
 ## Caché
 
 `style.css`, `maquina.js` y `tema.js` se cargan con `?v=N`. Al cambiar uno de
-los tres, subir el número en todas las páginas (`grep -rl 'v=4'`), si no el
+los tres, subir el número en todas las páginas (`grep -rl 'v=5'`), si no el
 navegador de quien ya visitó el sitio sigue con la versión vieja.
 
 ## Agregar una nota

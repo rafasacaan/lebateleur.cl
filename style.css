@@ -121,7 +121,7 @@ a:focus-visible{ outline:1px solid var(--tinta); outline-offset:4px; }
 .seccion{ padding-top:56px; font-size:16px; letter-spacing:.04em; }
 .seccion:first-of-type{ padding-top:72px; }
 
-.idea{ padding-top:20px; max-width:var(--medida); display:flex; flex-direction:column; gap:16px; font-size:19px; line-height:1.55; }
+.idea{ padding-top:20px; max-width:var(--medida); display:flex; flex-direction:column; gap:16px; font-size:16px; line-height:1.6; }
 
 .preguntas{ padding-top:20px; max-width:var(--medida); list-style:none; display:flex; flex-direction:column; gap:20px; font-size:18px; line-height:1.45; }
 .preguntas li{ display:flex; gap:20px; }
@@ -176,7 +176,7 @@ a:focus-visible{ outline:1px solid var(--tinta); outline-offset:4px; }
   .pie-links{ gap:16px; }
   .seccion{ padding-top:48px; font-size:15px; }
   .seccion:first-of-type{ padding-top:52px; }
-  .idea{ font-size:16px; }
+  .idea{ font-size:15px; }
   .preguntas{ font-size:16px; }
   .preguntas .r{ font-size:14px; }
   .preguntas .n, .fuentes .n{ width:32px; }
