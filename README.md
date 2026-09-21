@@ -90,7 +90,7 @@ junta al cargar, para que los bots que rastrean páginas no la cosechen.
 ## Caché
 
 `style.css`, `maquina.js` y `tema.js` se cargan con `?v=N`. Al cambiar uno de
-los tres, subir el número en todas las páginas (`grep -rl 'v=5'`), si no el
+los tres, subir el número en todas las páginas (`grep -rl 'v=6'`), si no el
 navegador de quien ya visitó el sitio sigue con la versión vieja.
 
 ## Agregar una nota
